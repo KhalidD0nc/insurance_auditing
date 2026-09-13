@@ -1,0 +1,2 @@
+# This project intentionally uses only the Python 3.11+ standard library.
+# There are no third-party runtime or test dependencies to install or pin.
