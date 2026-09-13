@@ -115,3 +115,48 @@ see how you worked, not just what you produced.
   externally.
 - If something in a contract seems genuinely ambiguous, it may well be. Record
   your reading and move on; do not spend the budget on it.
+
+## Candidate implementation
+
+The implementation is being built in auditable layers. The first layer performs
+high-precision structural checks that do not require interpreting free-text
+service descriptions. It has no third-party dependencies and runs on Python
+3.11 or newer; `requirements.txt` records that dependency decision explicitly.
+
+Run the tests:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+Run the structural audit and evaluate it on the labelled Hospital 1 development
+set:
+
+```bash
+python3 -m insurance_auditing structural-audit \
+  --hospital 1 \
+  --labels labels/hospital_1_labels.csv
+```
+
+The command reads the supplied files without changing them and prints a JSON
+summary. It deliberately does not produce `submission.csv` yet: contractual
+service matching and exact repricing are required before a submission is safe.
+
+Run the full Hospital 1 contract audit and labelled evaluation:
+
+```bash
+python3 -m insurance_auditing evaluate-hospital-1
+```
+
+This parses the contract tables, normalises abbreviated service descriptions,
+applies bundles, premiums, weekend uplifts, cumulative discounts, caps and
+exclusions in contract order, and reports invoice-level and per-category
+performance. Hospital 1 remains development data and is never written to the
+final submission.
+
+Current Hospital 1 development result: all 58 erroneous invoice IDs are found
+with no false positives, all labelled error categories are reproduced, and 909
+of 913 expected totals match exactly. The four amount differences are all
+daily-cap cases where the labels imply an unobserved quantity below the
+contractual maximum; the chosen non-overfitting treatment is recorded in
+`decision_log.md`.
