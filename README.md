@@ -160,3 +160,38 @@ of 913 expected totals match exactly. The four amount differences are all
 daily-cap cases where the labels imply an unobserved quantity below the
 contractual maximum; the chosen non-overfitting treatment is recorded in
 `decision_log.md`.
+
+Generate the preliminary line-level Hospital 4 review report:
+
+```bash
+python3 -m insurance_auditing audit-hospital-4 > hospital_4_audit_report.json
+```
+
+The report includes only flagged invoice identifiers by default. Pass
+`--include-correct` to include all 835 identifiers. Each line records its
+service match score, contractual and billed units, rate-calculation steps,
+threshold and cumulative quantities, payable quantity, expected total, and
+related bundle, exclusion, cap or duplicate lines. The report is explicitly
+marked `unlabelled_preliminary_review`; it does not create or update
+`submission.csv`. Its summary separates canonical line items from historical
+items belonging to earlier occurrences of reused invoice identifiers; those
+historical items still participate in cross-invoice calculations.
+
+After reviewing that report, generate or replace the Hospital 4 rows in the
+submission file:
+
+```bash
+python3 -m insurance_auditing generate-hospital-4-submission \
+  --output submission.csv
+```
+
+The write is atomic and preserves any existing rows whose invoice identifier
+does not start with `INV-H4-`. Confidence is calibrated by ambiguity type as
+documented in `decision_log.md`.
+
+## OpenRouter audit agent
+
+An internal, tool-using OpenRouter agent is available in
+`insurance_auditing/agent`. Other modules can call `run_agent()` and supply the
+built-in audit tools or their own `AgentTool` functions. It uses
+`z-ai/glm-5.3-flash`; see `insurance_auditing/agent/README.md` for usage.
