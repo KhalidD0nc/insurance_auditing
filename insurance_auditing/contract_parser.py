@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import re
 from collections import defaultdict
 from dataclasses import replace
@@ -108,6 +109,17 @@ def _section_text(markdown: str, section_number: int) -> str:
     return match.group()
 
 
+def _article_text(markdown: str, article: str) -> str:
+    match = re.search(
+        rf"^## Article {re.escape(article)}\b.*?(?=^## Article |\Z)",
+        markdown,
+        flags=re.MULTILINE | re.DOTALL,
+    )
+    if not match:
+        raise ValueError(f"Article {article} is missing")
+    return match.group()
+
+
 def _validate_rule_references(
     services: dict[str, ServiceRule],
     premiums: dict[str, ThresholdPremium],
@@ -134,6 +146,265 @@ def _validate_rule_references(
 def _require_count(name: str, actual: int, expected: int) -> None:
     if actual != expected:
         raise ValueError(f"Hospital 4 must contain {expected} {name}, found {actual}")
+
+
+_HOSPITAL_2_BASIS_PATTERN = "|".join(
+    re.escape(value)
+    for value in sorted(_UNIT_BASIS, key=len, reverse=True)
+)
+_HOSPITAL_2_SERVICE = re.compile(
+    rf"^(?P<clause>\d+\.\d+) In respect of (?P<service>.*?), "
+    rf"the Provider shall invoice the Payer at the rate of "
+    rf"(?P<rate>GBP [\d,]+\.\d{{2}}) "
+    rf"(?P<basis>{_HOSPITAL_2_BASIS_PATTERN})\.(?P<body>.*)$",
+    flags=re.MULTILINE,
+)
+
+
+def _require_hospital_2_count(name: str, actual: int, expected: int) -> None:
+    if actual != expected:
+        raise ValueError(
+            f"Hospital 2 must contain {expected} {name}, found {actual}"
+        )
+
+
+def load_hospital_2_contract(path: Path | str) -> ContractRules:
+    """Parse Hospital 2's prose-only agreement into executable rules.
+
+    The agreement deliberately distributes rates across prose clauses. Every
+    accepted rule is therefore tied to a numbered clause and the parser rejects
+    partial or structurally unexpected extraction.
+    """
+
+    contract_path = Path(path)
+    markdown = contract_path.read_text(encoding="utf-8")
+    identity = contract_for_hospital(2)
+    parsed_identity = (
+        _metadata_value(markdown, "Contract number"),
+        _contract_date(_metadata_value(markdown, "Effective from")),
+        _contract_date(_metadata_value(markdown, "Effective to")),
+    )
+    expected_identity = (
+        identity.contract_number,
+        identity.effective_from,
+        identity.effective_to,
+    )
+    if parsed_identity != expected_identity:
+        raise ValueError(
+            f"Hospital 2 contract identity mismatch: expected {expected_identity!r}, "
+            f"found {parsed_identity!r}"
+        )
+    if _metadata_value(markdown, "Currency") != "GBP":
+        raise ValueError("Hospital 2 uses an unsupported currency")
+    if _metadata_value(markdown, "Rounding convention") != "half_up_cent":
+        raise ValueError("Hospital 2 uses an unsupported rounding convention")
+
+    scope = _article_text(markdown, "I")
+    if "Main Campus (F-MAIN)" not in scope or "No facility differential" not in scope:
+        raise ValueError("Hospital 2 facility scope is missing or unsupported")
+    if "irrespective of the Patient's plan tier" not in scope:
+        raise ValueError("Hospital 2 plan-tier scope is missing or unsupported")
+
+    conventions = _article_text(markdown, "III")
+    order_markers = (
+        "substitution of a bundled rate",
+        "the facility multiplier",
+        "the plan-tier multiplier",
+        "any premium or uplift",
+        "any cumulative volume discount",
+    )
+    positions = [conventions.find(marker) for marker in order_markers]
+    if any(position < 0 for position in positions) or positions != sorted(positions):
+        raise ValueError("Hospital 2 adjustment order is missing or unsupported")
+    if "Rounding is applied after each individual step" not in conventions:
+        raise ValueError("Hospital 2 per-step rounding rule is missing or unsupported")
+    if "exclusion window is measured in either direction" not in conventions:
+        raise ValueError("Hospital 2 exclusion-window convention is unsupported")
+
+    matches = list(_HOSPITAL_2_SERVICE.finditer(markdown))
+    _require_hospital_2_count("service clauses", len(matches), 76)
+    services: dict[str, ServiceRule] = {}
+    clause_bodies: dict[str, tuple[str, str]] = {}
+    for match in matches:
+        clause_id = match.group("clause")
+        service = match.group("service")
+        basis = match.group("basis")
+        if service in services:
+            raise ValueError(f"duplicate Hospital 2 service: {service}")
+        services[service] = ServiceRule(
+            name=service,
+            unit_basis=_UNIT_BASIS[basis],
+            rate_cents=_money_to_cents(match.group("rate")),
+            clause_id=clause_id,
+        )
+        clause_bodies[service] = (clause_id, match.group("body"))
+
+    cap_pattern = re.compile(
+        r"shall not bill more than .*?\((\d+)\) [^.]+? of this Service"
+    )
+    premium_pattern = re.compile(
+        r"aggregate quantity of this Service.*?exceeds .*?\((\d+)\) [^,]+, "
+        r"the rate.*?increased by .*?\((\d+)%\)"
+    )
+    weekend_pattern = re.compile(
+        r"does not fall on a Business Day, the rate.*?increased by .*?\((\d+)%\)"
+    )
+    discount_pattern = re.compile(
+        r"cumulative utilisation of this Service exceeds .*?\((\d+)\) [^,]+,"
+        r".*?discount of .*?\((\d+)%\)"
+    )
+    exclusion_pattern = re.compile(
+        r"This Service is not billable where (.*?) has been delivered to the same "
+        r"Patient within .*?\((\d+)\) days"
+    )
+    bundle_pattern = re.compile(
+        rf"Where this Service and (.*?) are both delivered.*?this Service at "
+        rf"(GBP [\d,]+\.\d{{2}}) ({_HOSPITAL_2_BASIS_PATTERN}) and .*? at "
+        rf"(GBP [\d,]+\.\d{{2}}) ({_HOSPITAL_2_BASIS_PATTERN}), in substitution"
+    )
+
+    premiums: dict[str, ThresholdPremium] = {}
+    weekend_uplifts: dict[str, Decimal] = {}
+    discounts: dict[str, list[VolumeDiscount]] = defaultdict(list)
+    exclusions: list[ExclusionRule] = []
+    bundle_mentions: dict[
+        tuple[str, str], list[tuple[str, dict[str, int]]]
+    ] = defaultdict(list)
+    cap_count = 0
+    discount_count = 0
+
+    for service, (clause_id, body) in clause_bodies.items():
+        cap_matches = list(cap_pattern.finditer(body))
+        if len(cap_matches) > 1:
+            raise ValueError(f"multiple Hospital 2 caps in clause {clause_id}")
+        if cap_matches:
+            cap_count += 1
+            services[service] = replace(
+                services[service], daily_cap=int(cap_matches[0].group(1))
+            )
+
+        premium_matches = list(premium_pattern.finditer(body))
+        if len(premium_matches) > 1:
+            raise ValueError(f"multiple Hospital 2 premiums in clause {clause_id}")
+        if premium_matches:
+            threshold, percent = premium_matches[0].groups()
+            premiums[service] = ThresholdPremium(
+                service,
+                int(threshold),
+                Decimal(100 + int(percent)) / Decimal(100),
+                clause_id,
+            )
+
+        weekend_matches = list(weekend_pattern.finditer(body))
+        if len(weekend_matches) > 1:
+            raise ValueError(f"multiple Hospital 2 weekend uplifts in clause {clause_id}")
+        if weekend_matches:
+            weekend_uplifts[service] = (
+                Decimal(100 + int(weekend_matches[0].group(1))) / Decimal(100)
+            )
+
+        for discount_match in discount_pattern.finditer(body):
+            threshold, percent = discount_match.groups()
+            discounts[service].append(
+                VolumeDiscount(
+                    service,
+                    int(threshold),
+                    Decimal(100 - int(percent)) / Decimal(100),
+                    clause_id,
+                )
+            )
+            discount_count += 1
+
+        exclusion_matches = list(exclusion_pattern.finditer(body))
+        if len(exclusion_matches) > 1:
+            raise ValueError(f"multiple Hospital 2 exclusions in clause {clause_id}")
+        if exclusion_matches:
+            trigger, window = exclusion_matches[0].groups()
+            exclusions.append(ExclusionRule(service, int(window), trigger, clause_id))
+
+        bundle_matches = list(bundle_pattern.finditer(body))
+        if len(bundle_matches) > 1:
+            raise ValueError(f"multiple Hospital 2 bundles in clause {clause_id}")
+        if bundle_matches:
+            partner, own_rate, own_basis, partner_rate, partner_basis = (
+                bundle_matches[0].groups()
+            )
+            if partner not in services:
+                raise ValueError(
+                    f"Hospital 2 bundle in clause {clause_id} references "
+                    f"unknown service: {partner}"
+                )
+            if _UNIT_BASIS[own_basis] != services[service].unit_basis:
+                raise ValueError(f"Hospital 2 bundle basis mismatch in clause {clause_id}")
+            if _UNIT_BASIS[partner_basis] != services[partner].unit_basis:
+                raise ValueError(f"Hospital 2 partner basis mismatch in clause {clause_id}")
+            pair = tuple(sorted((service, partner)))
+            bundle_mentions[pair].append(
+                (
+                    clause_id,
+                    {
+                        service: _money_to_cents(own_rate),
+                        partner: _money_to_cents(partner_rate),
+                    },
+                )
+            )
+
+    _require_hospital_2_count("daily caps", cap_count, 8)
+    _require_hospital_2_count("threshold premiums", len(premiums), 9)
+    _require_hospital_2_count("weekend uplifts", len(weekend_uplifts), 8)
+    # The source contains twelve actual discount thresholds. Article III also
+    # describes discount ordering, but it is not itself a threshold rule.
+    _require_hospital_2_count("volume-discount thresholds", discount_count, 12)
+    _require_hospital_2_count(
+        "bundle mentions", sum(map(len, bundle_mentions.values())), 6
+    )
+    _require_hospital_2_count("bundle pairs", len(bundle_mentions), 3)
+    _require_hospital_2_count("exclusions", len(exclusions), 6)
+
+    bundles: list[BundleRule] = []
+    for pair, mentions in sorted(bundle_mentions.items()):
+        if len(mentions) != 2 or mentions[0][1] != mentions[1][1]:
+            raise ValueError(
+                f"Hospital 2 bundle must be symmetric and consistent: {pair!r}"
+            )
+        rates = mentions[0][1]
+        bundles.append(
+            BundleRule(
+                pair[0],
+                pair[1],
+                rates[pair[0]],
+                rates[pair[1]],
+                tuple(sorted(clause_id for clause_id, _ in mentions)),
+            )
+        )
+
+    immutable_discounts = {
+        service: tuple(sorted(rules, key=lambda rule: rule.threshold))
+        for service, rules in discounts.items()
+    }
+    immutable_exclusions = tuple(exclusions)
+    immutable_bundles = tuple(bundles)
+    _validate_rule_references(
+        services,
+        premiums,
+        weekend_uplifts,
+        immutable_discounts,
+        immutable_bundles,
+        immutable_exclusions,
+    )
+
+    return ContractRules(
+        identity=identity,
+        services=services,
+        threshold_premiums=premiums,
+        non_business_day_uplifts=weekend_uplifts,
+        volume_discounts=immutable_discounts,
+        bundles=immutable_bundles,
+        exclusions=immutable_exclusions,
+        pricing_pipeline=DEFAULT_PRICING_PIPELINE,
+        duplicate_billing_policy=DuplicateBillingPolicy.MATCHING_LINE_ACROSS_INVOICES,
+        source_sha256=hashlib.sha256(markdown.encode("utf-8")).hexdigest(),
+    )
 
 
 def load_hospital_1_contract(path: Path | str) -> ContractRules:

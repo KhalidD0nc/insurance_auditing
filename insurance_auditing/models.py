@@ -94,6 +94,10 @@ class LineAuditDetail:
     exclusion_trigger_line_ids: tuple[str, ...]
     daily_cap_related_line_ids: tuple[str, ...]
     duplicate_of_line_id: str | None
+    match_source: str = "deterministic"
+    match_key: str | None = None
+    match_confidence: float | None = None
+    contract_clause_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -124,6 +128,7 @@ class ServiceRule:
     unit_basis: str
     rate_cents: int
     daily_cap: int | None = None
+    clause_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -131,6 +136,7 @@ class ThresholdPremium:
     service: str
     threshold: int
     multiplier: Decimal
+    clause_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -138,6 +144,7 @@ class VolumeDiscount:
     service: str
     threshold: int
     multiplier: Decimal
+    clause_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -146,6 +153,7 @@ class BundleRule:
     service_b: str
     rate_a_cents: int
     rate_b_cents: int
+    clause_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -153,6 +161,7 @@ class ExclusionRule:
     excluded_service: str
     window_days: int
     trigger_service: str
+    clause_id: str | None = None
 
 
 class PricingStage(str, Enum):
@@ -192,6 +201,7 @@ class ContractRules:
     duplicate_billing_policy: DuplicateBillingPolicy = (
         DuplicateBillingPolicy.MATCHING_LINE_ACROSS_INVOICES
     )
+    source_sha256: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -199,3 +209,12 @@ class ServiceMatch:
     service_name: str | None
     score: float
     margin: float
+    source: str = "deterministic"
+    key: str | None = None
+    confidence: float | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ServiceMappingOverride:
+    service_name: str
+    confidence: float

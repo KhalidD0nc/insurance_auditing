@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal, ROUND_HALF_UP
@@ -18,6 +19,7 @@ from .models import (
     PricingStage,
     RateCalculationStep,
     ServiceMatch,
+    ServiceMappingOverride,
 )
 from .service_matching import ServiceMatcher
 
@@ -51,9 +53,20 @@ class _LineContext:
 
 
 class ContractAuditor:
-    def __init__(self, contract: ContractRules) -> None:
+    def __init__(
+        self,
+        contract: ContractRules,
+        service_mappings: Mapping[str, ServiceMappingOverride] | None = None,
+        *,
+        conservative_matching: bool = False,
+    ) -> None:
         self.contract = contract
-        self.matcher = ServiceMatcher(contract)
+        self.matcher = ServiceMatcher(
+            contract,
+            service_mappings,
+            minimum_margin=0.15 if conservative_matching else 0.0,
+            allow_price_tiebreaker=not conservative_matching,
+        )
         self._validate_pricing_pipeline()
 
     def _validate_pricing_pipeline(self) -> None:
@@ -210,6 +223,14 @@ class ContractAuditor:
                 sorted(context.daily_cap_related_line_ids)
             ),
             duplicate_of_line_id=context.duplicate_of_line_id,
+            match_source=context.match.source,
+            match_key=context.match.key,
+            match_confidence=context.match.confidence,
+            contract_clause_id=(
+                self.contract.services[service_name].clause_id
+                if service_name is not None
+                else None
+            ),
         )
 
     def _line_structural_categories(self, context: _LineContext) -> set[str]:
