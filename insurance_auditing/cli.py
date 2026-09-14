@@ -7,7 +7,7 @@ from pathlib import Path
 
 from .audit import StructuralAuditor
 from .contracts import contract_for_hospital
-from .contract_parser import load_hospital_1_contract
+from .contract_parser import load_hospital_1_contract, load_hospital_4_contract
 from .evaluation import (
     evaluate_categories,
     evaluate_flags,
@@ -16,7 +16,9 @@ from .evaluation import (
     metrics_as_dict,
 )
 from .io import load_hospital
-from .pricing import Hospital1Auditor
+from .pricing import ContractAuditor
+from .reporting import build_audit_report
+from .submission import build_hospital_4_submission_rows, write_submission_rows
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -38,6 +40,26 @@ def _parser() -> argparse.ArgumentParser:
         help="parse the Hospital 1 contract, reprice invoices, and evaluate against labels",
     )
     full.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_4 = subparsers.add_parser(
+        "audit-hospital-4",
+        help="produce a line-level preliminary review report for Hospital 4",
+    )
+    hospital_4.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_4.add_argument(
+        "--include-correct",
+        action="store_true",
+        help="include invoices with no detected issue in the report",
+    )
+    hospital_4_submission = subparsers.add_parser(
+        "generate-hospital-4-submission",
+        help="write reviewed Hospital 4 predictions to the submission CSV",
+    )
+    hospital_4_submission.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_4_submission.add_argument(
+        "--output",
+        type=Path,
+        default=Path("submission.csv"),
+    )
     return parser
 
 
@@ -49,7 +71,7 @@ def main() -> None:
         )
         label_path = args.data_root / "labels" / "hospital_1_labels.csv"
         dataset = load_hospital(args.data_root, 1)
-        findings = Hospital1Auditor(load_hospital_1_contract(contract_path)).audit(dataset)
+        findings = ContractAuditor(load_hospital_1_contract(contract_path)).audit(dataset)
         development_labels = load_development_labels(label_path)
         binary_labels = {
             invoice_id: label.is_erroneous
@@ -75,6 +97,56 @@ def main() -> None:
             },
         }
         print(json.dumps(output, indent=2, sort_keys=True))
+        return
+
+    if args.command == "audit-hospital-4":
+        contract_path = (
+            args.data_root
+            / "contracts"
+            / "hospital_4"
+            / "conditional_reimbursement_agreement.md"
+        )
+        dataset = load_hospital(args.data_root, 4)
+        result = ContractAuditor(
+            load_hospital_4_contract(contract_path)
+        ).audit_detailed(dataset)
+        report = build_audit_report(
+            dataset,
+            result,
+            include_correct=args.include_correct,
+        )
+        print(json.dumps(report, indent=2, sort_keys=True))
+        return
+
+    if args.command == "generate-hospital-4-submission":
+        contract_path = (
+            args.data_root
+            / "contracts"
+            / "hospital_4"
+            / "conditional_reimbursement_agreement.md"
+        )
+        dataset = load_hospital(args.data_root, 4)
+        result = ContractAuditor(
+            load_hospital_4_contract(contract_path)
+        ).audit_detailed(dataset)
+        rows = build_hospital_4_submission_rows(result)
+        write_submission_rows(
+            args.output,
+            rows,
+            replace_invoice_prefix="INV-H4-",
+        )
+        print(
+            json.dumps(
+                {
+                    "hospital": 4,
+                    "output": str(args.output.resolve()),
+                    "rows": len(rows),
+                    "flagged": sum(row["flagged"] == "1" for row in rows),
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
         return
 
     if args.command != "structural-audit":
