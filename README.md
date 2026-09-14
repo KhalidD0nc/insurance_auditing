@@ -1,5 +1,15 @@
 # Invoice Audit Exercise
 
+<p align="center">
+  <img src="Audit_Flow_Design.png" alt="Hybrid LLM and deterministic hospital invoice audit flow" width="100%">
+</p>
+
+<p align="center"><strong>LLM for ambiguity. Python for every financial decision.</strong></p>
+
+Contracts become validated rules, clear descriptions follow deterministic
+matching, and only ambiguous cases reach `z-ai/glm-5.3-flash`. Every accepted
+mapping passes a conservative gate before deterministic pricing and reporting.
+
 Meridian Health Assurance Group reimburses five hospitals under five separately
 negotiated service contracts. Each hospital submits invoices for the patients
 it has treated. Some of those invoices are wrong — a rate that does not match
@@ -115,16 +125,6 @@ see how you worked, not just what you produced.
   externally.
 - If something in a contract seems genuinely ambiguous, it may well be. Record
   your reading and move on; do not spend the budget on it.
-
-## Audit flow
-
-![Hospital contract audit flow](Audit_Flow_Design.png)
-
-Contracts are normalized into validated rules, while invoice descriptions take
-a deterministic matching path first. Only ambiguous descriptions reach
-`z-ai/glm-5.3-flash`; accepted mappings pass a conservative validation gate
-before entering the deterministic pricing engine. Unresolved mappings fail
-closed, and all financial calculations and final flags remain in Python.
 
 ## Candidate implementation
 
