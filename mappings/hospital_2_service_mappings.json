@@ -1,0 +1,4455 @@
+{
+  "contract_sha256": "c18ef5741215e525b211a141ea4bc66c6319e799d00f1a61d0b6c8a621c88db4",
+  "generated_at_utc": "2026-09-14T15:03:50.569463+00:00",
+  "hospital": 2,
+  "mappings": [
+    {
+      "candidates": [
+        {
+          "clause_id": "24.2",
+          "service_name": "Postoperative Ophthalmic Anaesthesia Administration",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "6.1",
+          "service_name": "Intermittent Ophthalmic Anaesthesia Administration",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "20.5",
+          "service_name": "Routine Ophthalmic Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "18.4",
+          "service_name": "Bedside Ophthalmic Radiotherapy Fraction",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "administration ophthalmic anaesthesia",
+      "raw_examples": [
+        "ADMIN OPHTH ANAES /SA-6486"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "14.4",
+          "service_name": "Advanced Gastrointestinal Endoscopic Procedure",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "18.2",
+          "service_name": "Supervised Hepatic Endoscopic Procedure",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "6.5",
+          "service_name": "Supervised Haematology Biopsy Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "16.4",
+          "service_name": "Outpatient Haematology Biopsy Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "10.6",
+          "service_name": "Assisted Gastrointestinal Biopsy Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "advanced endoscopic procedure",
+      "raw_examples": [
+        "ADV ENDOSCOPIC PROC /SA-6974"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "26.1",
+          "service_name": "Ambulatory Haematology Nutritional Support",
+          "text_score": 0.75,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "16.1",
+          "service_name": "Extended Otolaryngologic Nutritional Support",
+          "text_score": 0.4,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "24.3",
+          "service_name": "Preoperative Orthopaedic Ventilation Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "22.4",
+          "service_name": "Emergency Pulmonary Ventilation Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "8.2",
+          "service_name": "Continuous Renal Ventilation Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_day"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "ambulatory nutritional support",
+      "raw_examples": [
+        "AMB NUTRITIONAL SUPP /SA-7761"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.3",
+          "service_name": "Preoperative Orthopaedic Ventilation Support",
+          "text_score": 0.333333,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "22.4",
+          "service_name": "Emergency Pulmonary Ventilation Support",
+          "text_score": 0.333333,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "8.2",
+          "service_name": "Continuous Renal Ventilation Support",
+          "text_score": 0.333333,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "26.1",
+          "service_name": "Ambulatory Haematology Nutritional Support",
+          "text_score": 0.333333,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "20.5",
+          "service_name": "Routine Ophthalmic Laboratory Panel",
+          "text_score": 0.142857,
+          "unit_basis": "per_item"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "ambulatory ophthalmic ventilation support",
+      "raw_examples": [
+        "AMBULATORY - OPHTH VENTILATION SUPP"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.333333,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "8.1",
+          "service_name": "Assisted Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.333333,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "ambulatory palliative diagnostic imaging",
+      "raw_examples": [
+        "AMB - PALL DIAGNOSTIC IMG /SA-7135"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "28.2",
+          "service_name": "Preoperative Cardiac Specimen Analysis",
+          "text_score": 0.75,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "26.6",
+          "service_name": "Intermittent Cardiac Specimen Analysis",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "18.6",
+          "service_name": "Extended Dermatologic Specimen Analysis",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.6",
+          "service_name": "Advanced Dermatologic Specimen Analysis",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "12.6",
+          "service_name": "Postoperative Cardiac Physiotherapy Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "analysis cardiac specimen",
+      "raw_examples": [
+        "ANALYSIS CARD SPCM"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "18.6",
+          "service_name": "Extended Dermatologic Specimen Analysis",
+          "text_score": 0.75,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.6",
+          "service_name": "Advanced Dermatologic Specimen Analysis",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "28.2",
+          "service_name": "Preoperative Cardiac Specimen Analysis",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "26.6",
+          "service_name": "Intermittent Cardiac Specimen Analysis",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "14.3",
+          "service_name": "Supervised Rheumatologic Critical Care Occupancy",
+          "text_score": 0.0,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "analysis dermatologic specimen",
+      "raw_examples": [
+        "ANLY - DERM SPCM"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "10.6",
+          "service_name": "Assisted Gastrointestinal Biopsy Procedure",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "6.5",
+          "service_name": "Supervised Haematology Biopsy Procedure",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "16.4",
+          "service_name": "Outpatient Haematology Biopsy Procedure",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "18.2",
+          "service_name": "Supervised Hepatic Endoscopic Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "8.1",
+          "service_name": "Assisted Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "assisted biopsy procedure",
+      "raw_examples": [
+        "ASST BIOP PROC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "8.1",
+          "service_name": "Assisted Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "assisted diagnostic imaging",
+      "raw_examples": [
+        "ASST DIAG IMG /SA-7926",
+        "ASST DIAG IMAGING"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.4,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "18.4",
+          "service_name": "Bedside Ophthalmic Radiotherapy Fraction",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "14.5",
+          "service_name": "Bedside Obstetric Physiotherapy Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "14.3",
+          "service_name": "Supervised Rheumatologic Critical Care Occupancy",
+          "text_score": 0.0,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "bedside pharm dispensing",
+      "raw_examples": [
+        "BEDS PHARM DISP"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.6,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.333333,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "22.4",
+          "service_name": "Emergency Pulmonary Ventilation Support",
+          "text_score": 0.142857,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "18.4",
+          "service_name": "Bedside Ophthalmic Radiotherapy Fraction",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "22.3"
+        ],
+        "needs_review": false,
+        "normalized_description": "bedside pulmonary pharm dispensing",
+        "reason": "Exact semantic match to clause 22.3 service; 'bedside' + 'pulmonary' + 'dispensing' all align; next candidate (Focused Pulmonary Pharmaceutical Dispensing, 26.4) lacks the bedside modifier.",
+        "selected_service": "Bedside Pulmonary Pharmaceutical Dispensing"
+      },
+      "confidence": 0.95,
+      "evidence_clause_ids": [
+        "22.3"
+      ],
+      "failure_reason": null,
+      "normalized_description": "bedside pulmonary pharm dispensing",
+      "raw_examples": [
+        "BEDS PULMONARY PHARM DISP"
+      ],
+      "selected_service": "Bedside Pulmonary Pharmaceutical Dispensing",
+      "status": "accepted",
+      "verifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "22.3"
+        ],
+        "needs_review": false,
+        "normalized_description": "bedside pulmonary pharm dispensing",
+        "reason": "Exact semantic match to clause 22.3 service; 'bedside' + 'pulmonary' + 'dispensing' all align; next candidate (Focused Pulmonary Pharmaceutical Dispensing, 26.4) lacks the bedside modifier.",
+        "selected_service": "Bedside Pulmonary Pharmaceutical Dispensing"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "14.6",
+          "service_name": "Elective Cardiac Nursing Observation",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "28.2",
+          "service_name": "Preoperative Cardiac Specimen Analysis",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "12.6",
+          "service_name": "Postoperative Cardiac Physiotherapy Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "26.6",
+          "service_name": "Intermittent Cardiac Specimen Analysis",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "8.4",
+          "service_name": "Focused Cardiac Dialysis Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "14.6"
+        ],
+        "needs_review": false,
+        "normalized_description": "cardiac nursing observation",
+        "reason": "Only candidate covering cardiac nursing observation (clause 14.6); all other candidates are specimen analysis, physiotherapy, or dialysis.",
+        "selected_service": "Elective Cardiac Nursing Observation"
+      },
+      "confidence": 0.95,
+      "evidence_clause_ids": [
+        "14.6"
+      ],
+      "failure_reason": null,
+      "normalized_description": "cardiac nursing observation",
+      "raw_examples": [
+        "CARD  NURS OBS"
+      ],
+      "selected_service": "Elective Cardiac Nursing Observation",
+      "status": "accepted",
+      "verifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "14.6"
+        ],
+        "needs_review": false,
+        "normalized_description": "cardiac nursing observation",
+        "reason": "Only candidate covering cardiac nursing observation (clause 14.6); all other candidates are specimen analysis, physiotherapy, or dialysis.",
+        "selected_service": "Elective Cardiac Nursing Observation"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "18.5",
+          "service_name": "Elective Cardiac Transport Service",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "8.3",
+          "service_name": "Emergency Haematology Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "26.2",
+          "service_name": "Comprehensive Haematology Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "28.4",
+          "service_name": "Standard Psychiatric Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.9,
+        "evidence_clause_ids": [
+          "18.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "cardiac transport service",
+        "reason": "Only cardiac transport candidate (clause 18.5); description omits 'elective' but no competing cardiac transport service exists in the candidate set.",
+        "selected_service": "Elective Cardiac Transport Service"
+      },
+      "confidence": 0.9,
+      "evidence_clause_ids": [
+        "18.5"
+      ],
+      "failure_reason": null,
+      "normalized_description": "cardiac transport service",
+      "raw_examples": [
+        "CARDIAC  TRANSP SERVICE"
+      ],
+      "selected_service": "Elective Cardiac Transport Service",
+      "status": "accepted",
+      "verifier": {
+        "confidence": 0.9,
+        "evidence_clause_ids": [
+          "18.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "cardiac transport service",
+        "reason": "Only cardiac transport candidate (clause 18.5); description omits 'elective' but no competing cardiac transport service exists in the candidate set.",
+        "selected_service": "Elective Cardiac Transport Service"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "12.1",
+          "service_name": "Continuous Otolaryngologic Discharge Planning",
+          "text_score": 0.6,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "12.5",
+          "service_name": "Intermittent Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.142857,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "4.6",
+          "service_name": "Intensive Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.142857,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "16.1",
+          "service_name": "Extended Otolaryngologic Nutritional Support",
+          "text_score": 0.142857,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "8.2",
+          "service_name": "Continuous Renal Ventilation Support",
+          "text_score": 0.142857,
+          "unit_basis": "per_day"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "12.1"
+        ],
+        "needs_review": false,
+        "normalized_description": "continuous otolaryngologic discharge plng",
+        "reason": "Exact match to clause 12.1; remaining candidates are rehabilitation, nutritional support, or ventilation services.",
+        "selected_service": "Continuous Otolaryngologic Discharge Planning"
+      },
+      "confidence": 0.95,
+      "evidence_clause_ids": [
+        "12.1"
+      ],
+      "failure_reason": null,
+      "normalized_description": "continuous otolaryngologic discharge plng",
+      "raw_examples": [
+        "CONT ENT DISCH PLNG /SA-8811",
+        "CONT OTOLARYNGOLOGIC DISCH PLNG /SA-3899",
+        "CONT ENT DISCH PLNG"
+      ],
+      "selected_service": "Continuous Otolaryngologic Discharge Planning",
+      "status": "accepted",
+      "verifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "12.1"
+        ],
+        "needs_review": false,
+        "normalized_description": "continuous otolaryngologic discharge plng",
+        "reason": "Exact match to clause 12.1; remaining candidates are rehabilitation, nutritional support, or ventilation services.",
+        "selected_service": "Continuous Otolaryngologic Discharge Planning"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.6,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.333333,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "22.4",
+          "service_name": "Emergency Pulmonary Ventilation Support",
+          "text_score": 0.142857,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "18.4",
+          "service_name": "Bedside Ophthalmic Radiotherapy Fraction",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "22.3"
+        ],
+        "needs_review": false,
+        "normalized_description": "dispensing bedside pulmonary pharm",
+        "reason": "Word-order variant of the same description; clause 22.3 service matches all three modifiers.",
+        "selected_service": "Bedside Pulmonary Pharmaceutical Dispensing"
+      },
+      "confidence": 0.95,
+      "evidence_clause_ids": [
+        "22.3"
+      ],
+      "failure_reason": null,
+      "normalized_description": "dispensing bedside pulmonary pharm",
+      "raw_examples": [
+        "DISP BEDS PULMONARY PHARM",
+        "DISP - BEDS PULM PHARM"
+      ],
+      "selected_service": "Bedside Pulmonary Pharmaceutical Dispensing",
+      "status": "accepted",
+      "verifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "22.3"
+        ],
+        "needs_review": false,
+        "normalized_description": "dispensing bedside pulmonary pharm",
+        "reason": "Word-order variant of the same description; clause 22.3 service matches all three modifiers.",
+        "selected_service": "Bedside Pulmonary Pharmaceutical Dispensing"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "8.4",
+          "service_name": "Focused Cardiac Dialysis Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.8,
+        "evidence_clause_ids": [
+          "26.4"
+        ],
+        "needs_review": false,
+        "normalized_description": "dispensing focused pharm",
+        "reason": "Only 'focused' dispensing candidate (clause 26.4); description omits the pulmonary specialty but no other focused dispensing service is offered; bedside dispensing (22.3) is excluded by the 'focused' modifier.",
+        "selected_service": "Focused Pulmonary Pharmaceutical Dispensing"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "dispensing focused pharm",
+      "raw_examples": [
+        "DISP FOC PHARM"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.8,
+        "evidence_clause_ids": [
+          "26.4"
+        ],
+        "needs_review": false,
+        "normalized_description": "dispensing focused pharm",
+        "reason": "Only 'focused' dispensing candidate (clause 26.4); description omits the pulmonary specialty but no other focused dispensing service is offered; bedside dispensing (22.3) is excluded by the 'focused' modifier.",
+        "selected_service": "Focused Pulmonary Pharmaceutical Dispensing"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.6,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.333333,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "26.4"
+        ],
+        "needs_review": false,
+        "normalized_description": "dispensing focused pulmonary pharm",
+        "reason": "Exact match to clause 26.4 service; bedside dispensing (22.3) excluded by 'focused' modifier.",
+        "selected_service": "Focused Pulmonary Pharmaceutical Dispensing"
+      },
+      "confidence": 0.95,
+      "evidence_clause_ids": [
+        "26.4"
+      ],
+      "failure_reason": null,
+      "normalized_description": "dispensing focused pulmonary pharm",
+      "raw_examples": [
+        "DISP FOC PULM PHARM /SA-1272"
+      ],
+      "selected_service": "Focused Pulmonary Pharmaceutical Dispensing",
+      "status": "accepted",
+      "verifier": {
+        "confidence": 0.95,
+        "evidence_clause_ids": [
+          "26.4"
+        ],
+        "needs_review": false,
+        "normalized_description": "dispensing focused pulmonary pharm",
+        "reason": "Exact match to clause 26.4 service; bedside dispensing (22.3) excluded by 'focused' modifier.",
+        "selected_service": "Focused Pulmonary Pharmaceutical Dispensing"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "18.5",
+          "service_name": "Elective Cardiac Transport Service",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "8.3",
+          "service_name": "Emergency Haematology Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "26.2",
+          "service_name": "Comprehensive Haematology Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "28.4",
+          "service_name": "Standard Psychiatric Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.85,
+        "evidence_clause_ids": [
+          "18.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "elective transport service",
+        "reason": "Only elective transport candidate (clause 18.5); description omits the cardiac specialty but no competing elective transport service exists.",
+        "selected_service": "Elective Cardiac Transport Service"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "elective transport service",
+      "raw_examples": [
+        "ELECT TRANSP SVC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.85,
+        "evidence_clause_ids": [
+          "18.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "elective transport service",
+        "reason": "Only elective transport candidate (clause 18.5); description omits the cardiac specialty but no competing elective transport service exists.",
+        "selected_service": "Elective Cardiac Transport Service"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "20.3",
+          "service_name": "Postoperative Neurological Rehabilitation Programme",
+          "text_score": 0.166667,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "12.5",
+          "service_name": "Intermittent Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "4.6",
+          "service_name": "Intensive Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.166667,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "20.2",
+          "service_name": "Intensive Neurological Rehabilitation Programme",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.2,
+        "evidence_clause_ids": [
+          "22.1",
+          "20.2",
+          "20.3",
+          "12.5",
+          "4.6"
+        ],
+        "needs_review": true,
+        "normalized_description": "emergency musculoskeletal programme",
+        "reason": "No candidate combines 'musculoskeletal' with a programme: 22.1 is musculoskeletal diagnostic imaging (not a programme), while 20.2/20.3/12.5/4.6 are neurological or otolaryngologic rehabilitation programmes (not musculoskeletal). No candidate uniquely satisfies the description.",
+        "selected_service": null
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "emergency musculoskeletal programme",
+      "raw_examples": [
+        "EMER MSK PROG /SA-4534"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.2,
+        "evidence_clause_ids": [
+          "22.1",
+          "20.2",
+          "20.3",
+          "12.5",
+          "4.6"
+        ],
+        "needs_review": true,
+        "normalized_description": "emergency musculoskeletal programme",
+        "reason": "No candidate combines 'musculoskeletal' with a programme: 22.1 is musculoskeletal diagnostic imaging (not a programme), while 20.2/20.3/12.5/4.6 are neurological or otolaryngologic rehabilitation programmes (not musculoskeletal). No candidate uniquely satisfies the description.",
+        "selected_service": null
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "26.3",
+          "service_name": "Emergency Paediatric Theatre Time",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "28.1",
+          "service_name": "Postoperative Paediatric Theatre Time",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "4.4",
+          "service_name": "Emergency Renal Infusion Therapy",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.4",
+          "service_name": "Emergency Pulmonary Ventilation Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "8.3",
+          "service_name": "Emergency Haematology Transport Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.85,
+        "evidence_clause_ids": [
+          "26.3"
+        ],
+        "needs_review": false,
+        "normalized_description": "emergency theatre time",
+        "reason": "Only emergency theatre-time candidate (clause 26.3); description omits the paediatric qualifier but the postoperative alternative (28.1) lacks the emergency modifier.",
+        "selected_service": "Emergency Paediatric Theatre Time"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "emergency theatre time",
+      "raw_examples": [
+        "EMER THTR TM /SA-2118"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.85,
+        "evidence_clause_ids": [
+          "26.3"
+        ],
+        "needs_review": false,
+        "normalized_description": "emergency theatre time",
+        "reason": "Only emergency theatre-time candidate (clause 26.3); description omits the paediatric qualifier but the postoperative alternative (28.1) lacks the emergency modifier.",
+        "selected_service": "Emergency Paediatric Theatre Time"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "8.3",
+          "service_name": "Emergency Haematology Transport Service",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "18.5",
+          "service_name": "Elective Cardiac Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "26.2",
+          "service_name": "Comprehensive Haematology Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "28.4",
+          "service_name": "Standard Psychiatric Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "emergency transport service",
+      "raw_examples": [
+        "EMER  TRANSP SERVICE /SA-9292",
+        "EMER  TRANSP SVC /SA-1419"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "18.3",
+          "service_name": "Advanced Endocrine Case Conference",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "4.3",
+          "service_name": "Comprehensive Otolaryngologic Case Conference",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "14.3",
+          "service_name": "Supervised Rheumatologic Critical Care Occupancy",
+          "text_score": 0.0,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.0,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.0,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "endocrine case conference",
+      "raw_examples": [
+        "ENDO  CS CONF"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.5",
+          "service_name": "Extended Vascular Home Visit",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "10.2",
+          "service_name": "Preoperative Obstetric Home Visit",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.1",
+          "service_name": "Extended Otolaryngologic Nutritional Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "12.2",
+          "service_name": "Extended Orthopaedic Radiotherapy Fraction",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "18.6",
+          "service_name": "Extended Dermatologic Specimen Analysis",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "extended home visit",
+      "raw_examples": [
+        "EXTENDED - HM VST"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "12.2",
+          "service_name": "Extended Orthopaedic Radiotherapy Fraction",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "18.4",
+          "service_name": "Bedside Ophthalmic Radiotherapy Fraction",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "22.5",
+          "service_name": "Extended Vascular Home Visit",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.1",
+          "service_name": "Extended Otolaryngologic Nutritional Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "18.6",
+          "service_name": "Extended Dermatologic Specimen Analysis",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "extended radiotherapy fraction",
+      "raw_examples": [
+        "EXT RADIOTHER FRACT"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.6,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.333333,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "focused pulmonary pharm dispensing",
+      "raw_examples": [
+        "FOCUSED PULMONARY PHARM DISP",
+        "FOC  PULM PHARM DISP /SA-2738",
+        "FOC  PULM PHARM DISP"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.333333,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.333333,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.142857,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "focused vascular pharm dispensing",
+      "raw_examples": [
+        "FOC  VASC PHARM DISP /SA-5164"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "18.4",
+          "service_name": "Bedside Ophthalmic Radiotherapy Fraction",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "12.2",
+          "service_name": "Extended Orthopaedic Radiotherapy Fraction",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "14.5",
+          "service_name": "Bedside Obstetric Physiotherapy Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "14.3",
+          "service_name": "Supervised Rheumatologic Critical Care Occupancy",
+          "text_score": 0.0,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "fraction bedside radiotherapy",
+      "raw_examples": [
+        "FRACT BEDS RADIOTHER /SA-5851"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "6.5",
+          "service_name": "Supervised Haematology Biopsy Procedure",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "16.4",
+          "service_name": "Outpatient Haematology Biopsy Procedure",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "10.6",
+          "service_name": "Assisted Gastrointestinal Biopsy Procedure",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "18.2",
+          "service_name": "Supervised Hepatic Endoscopic Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "8.3",
+          "service_name": "Emergency Haematology Transport Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "haematology biopsy procedure",
+      "raw_examples": [
+        "HAEM BIOP PROC /SA-6522"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "8.1",
+          "service_name": "Assisted Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "imaging assisted diagnostic",
+      "raw_examples": [
+        "IMG ASST DIAG"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.333333,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "8.1",
+          "service_name": "Assisted Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.333333,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "imaging continuous cardiac diagnostic",
+      "raw_examples": [
+        "IMG CONT CARD DIAG /SA-4810"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "26.5",
+          "service_name": "Inpatient Paediatric Isolation Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "14.2",
+          "service_name": "Standard Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "10.3",
+          "service_name": "Standard Neurological Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "24.4",
+          "service_name": "Routine Infectious Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "20.4",
+          "service_name": "Preoperative Neurological Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "inpatient isolation room occupancy",
+      "raw_examples": [
+        "INPT ISOL RM OCC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.5",
+          "service_name": "Standard Musculoskeletal Recovery Room Occupancy",
+          "text_score": 0.428571,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "24.1",
+          "service_name": "Intermittent Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.428571,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.6",
+          "service_name": "Inpatient Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.428571,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "20.1",
+          "service_name": "Inpatient Ophthalmic Recovery Room Occupancy",
+          "text_score": 0.428571,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "4.5",
+          "service_name": "Focused Palliative Recovery Room Occupancy",
+          "text_score": 0.428571,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "intensive metabolic recovery room occupancy",
+      "raw_examples": [
+        "INTENS  - METAB RECOV RM OCC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "8.4",
+          "service_name": "Focused Cardiac Dialysis Session",
+          "text_score": 0.333333,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.6",
+          "service_name": "Routine Geriatric Physiotherapy Session",
+          "text_score": 0.142857,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "14.1",
+          "service_name": "Preoperative Obstetric Physiotherapy Session",
+          "text_score": 0.142857,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "12.6",
+          "service_name": "Postoperative Cardiac Physiotherapy Session",
+          "text_score": 0.142857,
+          "unit_basis": "per_visit"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "intermittent musculoskeletal dialysis session",
+      "raw_examples": [
+        "INTERM - MSK DIAL SESSION /SA-9704"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "12.5",
+          "service_name": "Intermittent Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "20.3",
+          "service_name": "Postoperative Neurological Rehabilitation Programme",
+          "text_score": 0.4,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "4.6",
+          "service_name": "Intensive Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.4,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "20.2",
+          "service_name": "Intensive Neurological Rehabilitation Programme",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "8.6",
+          "service_name": "Intermittent Psychiatric Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "intermittent rehabilitation programme",
+      "raw_examples": [
+        "INTERM  REHAB PROG"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.75,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "20.3",
+          "service_name": "Postoperative Neurological Rehabilitation Programme",
+          "text_score": 0.166667,
+          "unit_basis": "per_day"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "interpretation neurological imaging",
+      "raw_examples": [
+        "INTERPRETATION NEURO IMG /SA-5989"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "10.4",
+          "service_name": "Supervised Metabolic Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "interpretation supervised imaging",
+      "raw_examples": [
+        "INTERP  SUPERVISED IMG /SA-6042"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "10.4",
+          "service_name": "Supervised Metabolic Laboratory Panel",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "20.5",
+          "service_name": "Routine Ophthalmic Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "8.6",
+          "service_name": "Intermittent Psychiatric Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "18.1",
+          "service_name": "Standard Metabolic Telemetry Monitoring",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "metabolic laboratory panel",
+      "raw_examples": [
+        "METAB LAB PANEL"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "8.1",
+          "service_name": "Assisted Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "musculoskeletal diagnostic imaging",
+      "raw_examples": [
+        "MSK  DIAG IMG"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.5",
+          "service_name": "Standard Musculoskeletal Recovery Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "24.1",
+          "service_name": "Intermittent Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.6",
+          "service_name": "Inpatient Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "20.1",
+          "service_name": "Inpatient Ophthalmic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "4.5",
+          "service_name": "Focused Palliative Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "musculoskeletal recovery room occupancy",
+      "raw_examples": [
+        "MSK RECOVERY RM OCC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "20.3",
+          "service_name": "Postoperative Neurological Rehabilitation Programme",
+          "text_score": 0.75,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "20.2",
+          "service_name": "Intensive Neurological Rehabilitation Programme",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "12.5",
+          "service_name": "Intermittent Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "4.6",
+          "service_name": "Intensive Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.4,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "neurological rehabilitation programme",
+      "raw_examples": [
+        "NEURO  REHAB PROG",
+        "NEUROLOGICAL REHAB PROG /SA-9661"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "14.6",
+          "service_name": "Elective Cardiac Nursing Observation",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "28.2",
+          "service_name": "Preoperative Cardiac Specimen Analysis",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "12.6",
+          "service_name": "Postoperative Cardiac Physiotherapy Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "26.6",
+          "service_name": "Intermittent Cardiac Specimen Analysis",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "8.4",
+          "service_name": "Focused Cardiac Dialysis Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "observation cardiac nursing",
+      "raw_examples": [
+        "OBSERVATION  CARD NURSING"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "8.5",
+          "service_name": "Intensive Palliative Ward Bed Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "12.4",
+          "service_name": "Intensive Paediatric Infusion Therapy",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "4.6",
+          "service_name": "Intensive Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.142857,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "20.2",
+          "service_name": "Intensive Neurological Rehabilitation Programme",
+          "text_score": 0.142857,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.3",
+          "service_name": "Intensive Infectious Physiotherapy Session",
+          "text_score": 0.142857,
+          "unit_basis": "per_visit"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "occupancy intensive ward bed",
+      "raw_examples": [
+        "OCC INTENS WD BD"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "20.4",
+          "service_name": "Preoperative Neurological Isolation Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "14.2",
+          "service_name": "Standard Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "10.3",
+          "service_name": "Standard Neurological Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "24.4",
+          "service_name": "Routine Infectious Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "6.2",
+          "service_name": "Postoperative Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "occupancy preoperative isolation room",
+      "raw_examples": [
+        "OCC PREOP ISOL RM"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.5",
+          "service_name": "Standard Musculoskeletal Recovery Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "14.2",
+          "service_name": "Standard Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "10.3",
+          "service_name": "Standard Neurological Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "24.1",
+          "service_name": "Intermittent Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.6",
+          "service_name": "Inpatient Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "occupancy standard recovery room",
+      "raw_examples": [
+        "OCC STD RECOV RM"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "8.5",
+          "service_name": "Intensive Palliative Ward Bed Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "14.3",
+          "service_name": "Supervised Rheumatologic Critical Care Occupancy",
+          "text_score": 0.125,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "14.2",
+          "service_name": "Standard Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.125,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "10.3",
+          "service_name": "Standard Neurological Isolation Room Occupancy",
+          "text_score": 0.125,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "24.5",
+          "service_name": "Standard Musculoskeletal Recovery Room Occupancy",
+          "text_score": 0.125,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "oncology ward bed occupancy",
+      "raw_examples": [
+        "ONC WD BD OCC /SA-5889"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.2",
+          "service_name": "Postoperative Ophthalmic Anaesthesia Administration",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "6.1",
+          "service_name": "Intermittent Ophthalmic Anaesthesia Administration",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "20.5",
+          "service_name": "Routine Ophthalmic Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "18.4",
+          "service_name": "Bedside Ophthalmic Radiotherapy Fraction",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "ophthalmic anaesthesia administration",
+      "raw_examples": [
+        "OPHTH - ANAESTHESIA ADMIN /SA-3643"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "20.5",
+          "service_name": "Routine Ophthalmic Laboratory Panel",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.75,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "10.4",
+          "service_name": "Supervised Metabolic Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "8.6",
+          "service_name": "Intermittent Psychiatric Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "24.2",
+          "service_name": "Postoperative Ophthalmic Anaesthesia Administration",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "ophthalmic laboratory panel",
+      "raw_examples": [
+        "OPHTH LAB PNL"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "14.2",
+          "service_name": "Standard Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "6.2",
+          "service_name": "Postoperative Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "10.3",
+          "service_name": "Standard Neurological Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "24.4",
+          "service_name": "Routine Infectious Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "20.4",
+          "service_name": "Preoperative Neurological Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "orthopaedic isolation room occupancy",
+      "raw_examples": [
+        "ORTHOPAEDIC ISOL RM OCC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "4.3",
+          "service_name": "Comprehensive Otolaryngologic Case Conference",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "18.3",
+          "service_name": "Advanced Endocrine Case Conference",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "12.5",
+          "service_name": "Intermittent Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "4.6",
+          "service_name": "Intensive Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.166667,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "16.1",
+          "service_name": "Extended Otolaryngologic Nutritional Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "otolaryngologic case conference",
+      "raw_examples": [
+        "ENT CS CONF /SA-6459",
+        "ENT CS CONF /SA-5963"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "12.1",
+          "service_name": "Continuous Otolaryngologic Discharge Planning",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "12.5",
+          "service_name": "Intermittent Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "4.6",
+          "service_name": "Intensive Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.166667,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "16.1",
+          "service_name": "Extended Otolaryngologic Nutritional Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "4.3",
+          "service_name": "Comprehensive Otolaryngologic Case Conference",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "ValueError: agent returned invalid JSON",
+      "normalized_description": "otolaryngologic discharge plng",
+      "raw_examples": [
+        "OTOLARYNGOLOGIC  DISCH PLNG /SA-6235"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "12.5",
+          "service_name": "Intermittent Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "4.6",
+          "service_name": "Intensive Otolaryngologic Rehabilitation Programme",
+          "text_score": 0.75,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "20.3",
+          "service_name": "Postoperative Neurological Rehabilitation Programme",
+          "text_score": 0.4,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "20.2",
+          "service_name": "Intensive Neurological Rehabilitation Programme",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.1",
+          "service_name": "Extended Otolaryngologic Nutritional Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.3,
+        "evidence_clause_ids": [
+          "12.5",
+          "4.6"
+        ],
+        "needs_review": true,
+        "normalized_description": "otolaryngologic rehabilitation programme",
+        "reason": "Two equally scored candidates (Intermittent vs Intensive Otolaryngologic Rehabilitation Programme); description does not specify frequency or intensity, so no unique match.",
+        "selected_service": null
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "otolaryngologic rehabilitation programme",
+      "raw_examples": [
+        "ENT REHAB PROG"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.3,
+        "evidence_clause_ids": [
+          "12.5",
+          "4.6"
+        ],
+        "needs_review": true,
+        "normalized_description": "otolaryngologic rehabilitation programme",
+        "reason": "Two equally scored candidates (Intermittent vs Intensive Otolaryngologic Rehabilitation Programme); description does not specify frequency or intensity, so no unique match.",
+        "selected_service": null
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "20.6",
+          "service_name": "Standard Paediatric Infusion Therapy",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "12.4",
+          "service_name": "Intensive Paediatric Infusion Therapy",
+          "text_score": 0.75,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "4.4",
+          "service_name": "Emergency Renal Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.2",
+          "service_name": "Ambulatory Vascular Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.3,
+        "evidence_clause_ids": [
+          "20.6",
+          "12.4"
+        ],
+        "needs_review": true,
+        "normalized_description": "paediatric infusion therapy",
+        "reason": "Standard vs Intensive Paediatric Infusion Therapy tie at 0.75; description lacks the qualifier needed to choose one.",
+        "selected_service": null
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "paediatric infusion therapy",
+      "raw_examples": [
+        "PAEDIATRIC  INF THER",
+        "PAED  INF THER"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.3,
+        "evidence_clause_ids": [
+          "20.6",
+          "12.4"
+        ],
+        "needs_review": true,
+        "normalized_description": "paediatric infusion therapy",
+        "reason": "Standard vs Intensive Paediatric Infusion Therapy tie at 0.75; description lacks the qualifier needed to choose one.",
+        "selected_service": null
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "28.1",
+          "service_name": "Postoperative Paediatric Theatre Time",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "26.3",
+          "service_name": "Emergency Paediatric Theatre Time",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "20.6",
+          "service_name": "Standard Paediatric Infusion Therapy",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "12.4",
+          "service_name": "Intensive Paediatric Infusion Therapy",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "26.5",
+          "service_name": "Inpatient Paediatric Isolation Room Occupancy",
+          "text_score": 0.142857,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.3,
+        "evidence_clause_ids": [
+          "28.1",
+          "26.3"
+        ],
+        "needs_review": true,
+        "normalized_description": "paediatric theatre time",
+        "reason": "Postoperative vs Emergency Paediatric Theatre Time tie at 0.75; description omits the distinguishing context.",
+        "selected_service": null
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "paediatric theatre time",
+      "raw_examples": [
+        "PAED THEATRE TM /SA-1156"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.3,
+        "evidence_clause_ids": [
+          "28.1",
+          "26.3"
+        ],
+        "needs_review": true,
+        "normalized_description": "paediatric theatre time",
+        "reason": "Postoperative vs Emergency Paediatric Theatre Time tie at 0.75; description omits the distinguishing context.",
+        "selected_service": null
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "4.5",
+          "service_name": "Focused Palliative Recovery Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "24.5",
+          "service_name": "Standard Musculoskeletal Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "24.1",
+          "service_name": "Intermittent Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.6",
+          "service_name": "Inpatient Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "20.1",
+          "service_name": "Inpatient Ophthalmic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.85,
+        "evidence_clause_ids": [
+          "4.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "palliative recovery room occupancy",
+        "reason": "Only palliative recovery-room candidate, clearly ahead of next score (0.8 vs 0.5).",
+        "selected_service": "Focused Palliative Recovery Room Occupancy"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "palliative recovery room occupancy",
+      "raw_examples": [
+        "PALL RECOV ROOM OCC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.85,
+        "evidence_clause_ids": [
+          "4.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "palliative recovery room occupancy",
+        "reason": "Only palliative recovery-room candidate, clearly ahead of next score (0.8 vs 0.5).",
+        "selected_service": "Focused Palliative Recovery Room Occupancy"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.75,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "10.4",
+          "service_name": "Supervised Metabolic Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "20.5",
+          "service_name": "Routine Ophthalmic Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "8.6",
+          "service_name": "Intermittent Psychiatric Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.7,
+        "evidence_clause_ids": [
+          "16.2"
+        ],
+        "needs_review": false,
+        "normalized_description": "panel focused laboratory",
+        "reason": "Only candidate combining 'focused' with a laboratory panel; next candidates lack the 'focused' qualifier.",
+        "selected_service": "Focused Ophthalmic Laboratory Panel"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "panel focused laboratory",
+      "raw_examples": [
+        "PNL FOC LAB /SA-4377"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.7,
+        "evidence_clause_ids": [
+          "16.2"
+        ],
+        "needs_review": false,
+        "normalized_description": "panel focused laboratory",
+        "reason": "Only candidate combining 'focused' with a laboratory panel; next candidates lack the 'focused' qualifier.",
+        "selected_service": "Focused Ophthalmic Laboratory Panel"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "8.4",
+          "service_name": "Focused Cardiac Dialysis Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.65,
+        "evidence_clause_ids": [
+          "26.4"
+        ],
+        "needs_review": false,
+        "normalized_description": "pharm focused pulmonary",
+        "reason": "Only candidate uniting 'focused', 'pulmonary', and pharmaceutical dispensing; all others score far lower.",
+        "selected_service": "Focused Pulmonary Pharmaceutical Dispensing"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "pharm focused pulmonary",
+      "raw_examples": [
+        "PHARM FOC PULM"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.65,
+        "evidence_clause_ids": [
+          "26.4"
+        ],
+        "needs_review": false,
+        "normalized_description": "pharm focused pulmonary",
+        "reason": "Only candidate uniting 'focused', 'pulmonary', and pharmaceutical dispensing; all others score far lower.",
+        "selected_service": "Focused Pulmonary Pharmaceutical Dispensing"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "16.6",
+          "service_name": "Routine Geriatric Physiotherapy Session",
+          "text_score": 0.142857,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "12.1",
+          "service_name": "Continuous Otolaryngologic Discharge Planning",
+          "text_score": 0.142857,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "18.4",
+          "service_name": "Bedside Ophthalmic Radiotherapy Fraction",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "14.5",
+          "service_name": "Bedside Obstetric Physiotherapy Session",
+          "text_score": 0.142857,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.2,
+        "evidence_clause_ids": [
+          "12.1",
+          "16.6",
+          "22.3"
+        ],
+        "needs_review": true,
+        "normalized_description": "plng bedside geriatric discharge",
+        "reason": "All candidates tie at 0.142857; none combines bedside, geriatric, and discharge planning, so no unique identification.",
+        "selected_service": null
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "plng bedside geriatric discharge",
+      "raw_examples": [
+        "PLNG  BEDS GERIATRIC DISCH"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.2,
+        "evidence_clause_ids": [
+          "12.1",
+          "16.6",
+          "22.3"
+        ],
+        "needs_review": true,
+        "normalized_description": "plng bedside geriatric discharge",
+        "reason": "All candidates tie at 0.142857; none combines bedside, geriatric, and discharge planning, so no unique identification.",
+        "selected_service": null
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.2",
+          "service_name": "Postoperative Ophthalmic Anaesthesia Administration",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "6.1",
+          "service_name": "Intermittent Ophthalmic Anaesthesia Administration",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "28.1",
+          "service_name": "Postoperative Paediatric Theatre Time",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "24.2"
+        ],
+        "needs_review": false,
+        "normalized_description": "postoperative anaesthesia administration",
+        "reason": "Only candidate matching both 'postoperative' and 'anaesthesia administration'; next candidate lacks 'postoperative'.",
+        "selected_service": "Postoperative Ophthalmic Anaesthesia Administration"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "postoperative anaesthesia administration",
+      "raw_examples": [
+        "POSTOP ANAES ADMIN"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "24.2"
+        ],
+        "needs_review": false,
+        "normalized_description": "postoperative anaesthesia administration",
+        "reason": "Only candidate matching both 'postoperative' and 'anaesthesia administration'; next candidate lacks 'postoperative'.",
+        "selected_service": "Postoperative Ophthalmic Anaesthesia Administration"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.75,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "20.6",
+          "service_name": "Standard Paediatric Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "12.4",
+          "service_name": "Intensive Paediatric Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "4.4",
+          "service_name": "Emergency Renal Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.2",
+          "service_name": "Ambulatory Vascular Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "10.1"
+        ],
+        "needs_review": false,
+        "normalized_description": "postoperative infusion therapy",
+        "reason": "Only candidate matching both 'postoperative' and 'infusion therapy'; all others score 0.4.",
+        "selected_service": "Postoperative Pulmonary Infusion Therapy"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "postoperative infusion therapy",
+      "raw_examples": [
+        "POSTOP INF THER"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "10.1"
+        ],
+        "needs_review": false,
+        "normalized_description": "postoperative infusion therapy",
+        "reason": "Only candidate matching both 'postoperative' and 'infusion therapy'; all others score 0.4.",
+        "selected_service": "Postoperative Pulmonary Infusion Therapy"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "28.1",
+          "service_name": "Postoperative Paediatric Theatre Time",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "26.3",
+          "service_name": "Emergency Paediatric Theatre Time",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "24.2",
+          "service_name": "Postoperative Ophthalmic Anaesthesia Administration",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "28.1"
+        ],
+        "needs_review": false,
+        "normalized_description": "postoperative theatre time",
+        "reason": "Only candidate matching both 'postoperative' and 'theatre time'; next candidate lacks 'postoperative'.",
+        "selected_service": "Postoperative Paediatric Theatre Time"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "postoperative theatre time",
+      "raw_examples": [
+        "POSTOP THTR TM"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "28.1"
+        ],
+        "needs_review": false,
+        "normalized_description": "postoperative theatre time",
+        "reason": "Only candidate matching both 'postoperative' and 'theatre time'; next candidate lacks 'postoperative'.",
+        "selected_service": "Postoperative Paediatric Theatre Time"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "28.2",
+          "service_name": "Preoperative Cardiac Specimen Analysis",
+          "text_score": 0.75,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "26.6",
+          "service_name": "Intermittent Cardiac Specimen Analysis",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "18.6",
+          "service_name": "Extended Dermatologic Specimen Analysis",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.6",
+          "service_name": "Advanced Dermatologic Specimen Analysis",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "preoperative specimen analysis",
+      "raw_examples": [
+        "PREOP SPCM ANLY /SA-5067"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "18.2",
+          "service_name": "Supervised Hepatic Endoscopic Procedure",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "14.4",
+          "service_name": "Advanced Gastrointestinal Endoscopic Procedure",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "6.5",
+          "service_name": "Supervised Haematology Biopsy Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "16.4",
+          "service_name": "Outpatient Haematology Biopsy Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "10.6",
+          "service_name": "Assisted Gastrointestinal Biopsy Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "procedure hepatic endoscopic",
+      "raw_examples": [
+        "PROC HEP ENDOSC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "28.4",
+          "service_name": "Standard Psychiatric Transfusion Service",
+          "text_score": 0.75,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "6.4",
+          "service_name": "Specialist Psychiatric Sterilisation Service",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "8.6",
+          "service_name": "Intermittent Psychiatric Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "psychiatric transfusion service",
+      "raw_examples": [
+        "PSYCH TRANSF SVC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.75,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "20.6",
+          "service_name": "Standard Paediatric Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "12.4",
+          "service_name": "Intensive Paediatric Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "4.4",
+          "service_name": "Emergency Renal Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.2",
+          "service_name": "Ambulatory Vascular Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "pulmonary infusion therapy",
+      "raw_examples": [
+        "PULM INF THER /SA-9868"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.4,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "22.4",
+          "service_name": "Emergency Pulmonary Ventilation Support",
+          "text_score": 0.166667,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "14.3",
+          "service_name": "Supervised Rheumatologic Critical Care Occupancy",
+          "text_score": 0.0,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "pulmonary pharm dispensing",
+      "raw_examples": [
+        "PULM PHARM DISP /SA-2727"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.6,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.333333,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "22.4",
+          "service_name": "Emergency Pulmonary Ventilation Support",
+          "text_score": 0.142857,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "18.4",
+          "service_name": "Bedside Ophthalmic Radiotherapy Fraction",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "pulmonary pharm dispensing bedside",
+      "raw_examples": [
+        "PULM PHARM DISP BEDS"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "26.4",
+          "service_name": "Focused Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.6,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "22.3",
+          "service_name": "Bedside Pulmonary Pharmaceutical Dispensing",
+          "text_score": 0.333333,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "pulmonary pharm dispensing focused",
+      "raw_examples": [
+        "PULM PHARM DISP FOC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "4.3",
+          "service_name": "Comprehensive Otolaryngologic Case Conference",
+          "text_score": 0.333333,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "18.3",
+          "service_name": "Advanced Endocrine Case Conference",
+          "text_score": 0.333333,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "18.2",
+          "service_name": "Supervised Hepatic Endoscopic Procedure",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "20.5",
+          "service_name": "Routine Ophthalmic Laboratory Panel",
+          "text_score": 0.142857,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.142857,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "routine hepatic case conference",
+      "raw_examples": [
+        "ROUTINE HEP CS CONF"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "20.5",
+          "service_name": "Routine Ophthalmic Laboratory Panel",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "10.4",
+          "service_name": "Supervised Metabolic Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "8.6",
+          "service_name": "Intermittent Psychiatric Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "16.2",
+          "service_name": "Focused Ophthalmic Laboratory Panel",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "routine laboratory panel",
+      "raw_examples": [
+        "ROUTINE LAB PNL /SA-5904"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "16.6",
+          "service_name": "Routine Geriatric Physiotherapy Session",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "14.1",
+          "service_name": "Preoperative Obstetric Physiotherapy Session",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "12.6",
+          "service_name": "Postoperative Cardiac Physiotherapy Session",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.3",
+          "service_name": "Intensive Infectious Physiotherapy Session",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "14.5",
+          "service_name": "Bedside Obstetric Physiotherapy Session",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "routine physiotherapy session",
+      "raw_examples": [
+        "RTN PHYSIO SESS"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "8.3",
+          "service_name": "Emergency Haematology Transport Service",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "18.5",
+          "service_name": "Elective Cardiac Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "26.2",
+          "service_name": "Comprehensive Haematology Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "28.4",
+          "service_name": "Standard Psychiatric Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "service emergency transport",
+      "raw_examples": [
+        "SVC EMER TRANSP"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "8.4",
+          "service_name": "Focused Cardiac Dialysis Session",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "12.6",
+          "service_name": "Postoperative Cardiac Physiotherapy Session",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.6",
+          "service_name": "Routine Geriatric Physiotherapy Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "14.1",
+          "service_name": "Preoperative Obstetric Physiotherapy Session",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "28.2",
+          "service_name": "Preoperative Cardiac Specimen Analysis",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "session cardiac dialysis",
+      "raw_examples": [
+        "SESS CARD DIAL"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "14.1",
+          "service_name": "Preoperative Obstetric Physiotherapy Session",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.6",
+          "service_name": "Routine Geriatric Physiotherapy Session",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "12.6",
+          "service_name": "Postoperative Cardiac Physiotherapy Session",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "16.3",
+          "service_name": "Intensive Infectious Physiotherapy Session",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "14.5",
+          "service_name": "Bedside Obstetric Physiotherapy Session",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "session preoperative physiotherapy",
+      "raw_examples": [
+        "SESS PREOP PHYSIO"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "16.1",
+          "service_name": "Extended Otolaryngologic Nutritional Support",
+          "text_score": 0.333333,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "26.1",
+          "service_name": "Ambulatory Haematology Nutritional Support",
+          "text_score": 0.333333,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "18.2",
+          "service_name": "Supervised Hepatic Endoscopic Procedure",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "6.4",
+          "service_name": "Specialist Psychiatric Sterilisation Service",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "24.3",
+          "service_name": "Preoperative Orthopaedic Ventilation Support",
+          "text_score": 0.142857,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "specialist hepatic nutritional support",
+      "raw_examples": [
+        "SPCLST HEP NUTR SUPP"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "6.4",
+          "service_name": "Specialist Psychiatric Sterilisation Service",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.4",
+          "service_name": "Standard Psychiatric Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "8.3",
+          "service_name": "Emergency Haematology Transport Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "specialist sterilisation service",
+      "raw_examples": [
+        "SPCLST STERILISATION SVC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "18.1",
+          "service_name": "Standard Metabolic Telemetry Monitoring",
+          "text_score": 0.6,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "4.2",
+          "service_name": "Assisted Infectious Telemetry Monitoring",
+          "text_score": 0.333333,
+          "unit_basis": "per_hour_per_item"
+        },
+        {
+          "clause_id": "28.4",
+          "service_name": "Standard Psychiatric Transfusion Service",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "20.6",
+          "service_name": "Standard Paediatric Infusion Therapy",
+          "text_score": 0.142857,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "10.6",
+          "service_name": "Assisted Gastrointestinal Biopsy Procedure",
+          "text_score": 0.142857,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "standard gastrointestinal telemetry monitoring",
+      "raw_examples": [
+        "STD  GI TELEM MONIT"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "14.2",
+          "service_name": "Standard Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "10.3",
+          "service_name": "Standard Neurological Isolation Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "24.5",
+          "service_name": "Standard Musculoskeletal Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "24.4",
+          "service_name": "Routine Infectious Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "20.4",
+          "service_name": "Preoperative Neurological Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "standard isolation room occupancy",
+      "raw_examples": [
+        "STD ISOL RM OCC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.2",
+          "service_name": "Postoperative Ophthalmic Anaesthesia Administration",
+          "text_score": 0.333333,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "6.1",
+          "service_name": "Intermittent Ophthalmic Anaesthesia Administration",
+          "text_score": 0.333333,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.4",
+          "service_name": "Standard Psychiatric Transfusion Service",
+          "text_score": 0.142857,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "20.6",
+          "service_name": "Standard Paediatric Infusion Therapy",
+          "text_score": 0.142857,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "18.1",
+          "service_name": "Standard Metabolic Telemetry Monitoring",
+          "text_score": 0.142857,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "standard otolaryngologic anaesthesia administration",
+      "raw_examples": [
+        "STD ENT ANAES ADMIN /SA-3414"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.5",
+          "service_name": "Standard Musculoskeletal Recovery Room Occupancy",
+          "text_score": 0.8,
+          "unit_basis": "per_night"
+        },
+        {
+          "clause_id": "14.2",
+          "service_name": "Standard Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "10.3",
+          "service_name": "Standard Neurological Isolation Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_day"
+        },
+        {
+          "clause_id": "24.1",
+          "service_name": "Intermittent Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.6",
+          "service_name": "Inpatient Orthopaedic Recovery Room Occupancy",
+          "text_score": 0.5,
+          "unit_basis": "per_night"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "standard recovery room occupancy",
+      "raw_examples": [
+        "STD RECOV RM OCC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "18.1",
+          "service_name": "Standard Metabolic Telemetry Monitoring",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "4.2",
+          "service_name": "Assisted Infectious Telemetry Monitoring",
+          "text_score": 0.4,
+          "unit_basis": "per_hour_per_item"
+        },
+        {
+          "clause_id": "28.4",
+          "service_name": "Standard Psychiatric Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "20.6",
+          "service_name": "Standard Paediatric Infusion Therapy",
+          "text_score": 0.166667,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "14.2",
+          "service_name": "Standard Orthopaedic Isolation Room Occupancy",
+          "text_score": 0.142857,
+          "unit_basis": "per_day"
+        }
+      ],
+      "classifier": null,
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "normalized_description": "standard telemetry monitoring",
+      "raw_examples": [
+        "STD - TELEM MONIT /SA-8775",
+        "STD  - TELEM MONIT"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": null
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "6.5",
+          "service_name": "Supervised Haematology Biopsy Procedure",
+          "text_score": 0.75,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "18.2",
+          "service_name": "Supervised Hepatic Endoscopic Procedure",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.4",
+          "service_name": "Outpatient Haematology Biopsy Procedure",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "10.6",
+          "service_name": "Assisted Gastrointestinal Biopsy Procedure",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "6.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "supervised biopsy procedure",
+        "reason": "Top candidate with clear semantic match; clause 6.5 confirms a supervised biopsy procedure under haematology.",
+        "selected_service": "Supervised Haematology Biopsy Procedure"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "supervised biopsy procedure",
+      "raw_examples": [
+        "SUPERVISED BIOPSY PROC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "6.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "supervised biopsy procedure",
+        "reason": "Confirmed: clause 6.5 defines a supervised biopsy procedure (haematology) billed per item; the only supervised biopsy candidate.",
+        "selected_service": "Supervised Haematology Biopsy Procedure"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.75,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "10.4",
+          "service_name": "Supervised Metabolic Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "24.6"
+        ],
+        "needs_review": false,
+        "normalized_description": "supervised imaging interpretation",
+        "reason": "Top candidate with clear semantic match; clause 24.6 confirms a supervised imaging interpretation service.",
+        "selected_service": "Supervised Neurological Imaging Interpretation"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "supervised imaging interpretation",
+      "raw_examples": [
+        "SUPV  IMG INTERP"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "24.6"
+        ],
+        "needs_review": false,
+        "normalized_description": "supervised imaging interpretation",
+        "reason": "Confirmed: clause 24.6 defines supervised imaging interpretation (neurological) billed per procedure; the only supervised imaging-interpretation candidate.",
+        "selected_service": "Supervised Neurological Imaging Interpretation"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "10.4",
+          "service_name": "Supervised Metabolic Laboratory Panel",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "18.2",
+          "service_name": "Supervised Hepatic Endoscopic Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "6.5",
+          "service_name": "Supervised Haematology Biopsy Procedure",
+          "text_score": 0.166667,
+          "unit_basis": "per_item"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.0,
+        "evidence_clause_ids": [],
+        "needs_review": true,
+        "normalized_description": "supervised ophthalmic imaging",
+        "reason": "No candidate matches ophthalmic imaging; all candidates are unrelated specialties (neurological, musculoskeletal, metabolic, hepatic, haematology).",
+        "selected_service": null
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "supervised ophthalmic imaging",
+      "raw_examples": [
+        "SUPV OPHTH IMG"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.0,
+        "evidence_clause_ids": [],
+        "needs_review": true,
+        "normalized_description": "supervised ophthalmic imaging",
+        "reason": "No ophthalmic imaging service exists among candidates; all are unrelated specialties. Needs manual review.",
+        "selected_service": null
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "20.6",
+          "service_name": "Standard Paediatric Infusion Therapy",
+          "text_score": 0.75,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "10.1",
+          "service_name": "Postoperative Pulmonary Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "12.4",
+          "service_name": "Intensive Paediatric Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_unit_dispensed"
+        },
+        {
+          "clause_id": "4.4",
+          "service_name": "Emergency Renal Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        },
+        {
+          "clause_id": "22.2",
+          "service_name": "Ambulatory Vascular Infusion Therapy",
+          "text_score": 0.4,
+          "unit_basis": "per_hour"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "20.6"
+        ],
+        "needs_review": false,
+        "normalized_description": "therapy standard infusion",
+        "reason": "Top candidate with clear semantic match; clause 20.6 confirms a standard infusion therapy service.",
+        "selected_service": "Standard Paediatric Infusion Therapy"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "therapy standard infusion",
+      "raw_examples": [
+        "THER  STANDARD INF"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "20.6"
+        ],
+        "needs_review": false,
+        "normalized_description": "therapy standard infusion",
+        "reason": "Confirmed: clause 20.6 defines standard infusion therapy (paediatric) billed per hour; the only standard-infusion candidate.",
+        "selected_service": "Standard Paediatric Infusion Therapy"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.75,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "24.6",
+          "service_name": "Supervised Neurological Imaging Interpretation",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "28.3",
+          "service_name": "Routine Neurological Imaging Interpretation",
+          "text_score": 0.4,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "22.1",
+          "service_name": "Supervised Musculoskeletal Diagnostic Imaging",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "6.3"
+        ],
+        "needs_review": false,
+        "normalized_description": "vascular imaging interpretation",
+        "reason": "Top candidate with clear semantic match; clause 6.3 confirms a vascular imaging interpretation service.",
+        "selected_service": "Preoperative Vascular Imaging Interpretation"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "vascular imaging interpretation",
+      "raw_examples": [
+        "VASC IMAGING INTERP"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "6.3"
+        ],
+        "needs_review": false,
+        "normalized_description": "vascular imaging interpretation",
+        "reason": "Confirmed: clause 6.3 defines vascular imaging interpretation (preoperative) billed per test; the only vascular imaging-interpretation candidate.",
+        "selected_service": "Preoperative Vascular Imaging Interpretation"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.4,
+          "unit_basis": "per_procedure"
+        },
+        {
+          "clause_id": "8.3",
+          "service_name": "Emergency Haematology Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "18.5",
+          "service_name": "Elective Cardiac Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        },
+        {
+          "clause_id": "26.2",
+          "service_name": "Comprehensive Haematology Transport Service",
+          "text_score": 0.4,
+          "unit_basis": "per_item"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "16.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "vascular transport service",
+        "reason": "Top candidate with clear semantic match; clause 16.5 confirms a vascular transport service.",
+        "selected_service": "Postoperative Vascular Transport Service"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "vascular transport service",
+      "raw_examples": [
+        "VASC TRANSP SVC"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "16.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "vascular transport service",
+        "reason": "Confirmed: clause 16.5 defines a vascular transport service (postoperative) billed per visit; the only vascular transport candidate.",
+        "selected_service": "Postoperative Vascular Transport Service"
+      }
+    },
+    {
+      "candidates": [
+        {
+          "clause_id": "22.5",
+          "service_name": "Extended Vascular Home Visit",
+          "text_score": 0.75,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "10.2",
+          "service_name": "Preoperative Obstetric Home Visit",
+          "text_score": 0.4,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "6.3",
+          "service_name": "Preoperative Vascular Imaging Interpretation",
+          "text_score": 0.166667,
+          "unit_basis": "per_test"
+        },
+        {
+          "clause_id": "16.5",
+          "service_name": "Postoperative Vascular Transport Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_visit"
+        },
+        {
+          "clause_id": "12.3",
+          "service_name": "Focused Vascular Transfusion Service",
+          "text_score": 0.166667,
+          "unit_basis": "per_procedure"
+        }
+      ],
+      "classifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "22.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "visit vascular home",
+        "reason": "Top candidate with clear semantic match; clause 22.5 confirms a vascular home visit service.",
+        "selected_service": "Extended Vascular Home Visit"
+      },
+      "confidence": 0.0,
+      "evidence_clause_ids": [],
+      "failure_reason": "conservative_gate_rejected",
+      "normalized_description": "visit vascular home",
+      "raw_examples": [
+        "VST VASCULAR HM /SA-8814"
+      ],
+      "selected_service": null,
+      "status": "unresolved",
+      "verifier": {
+        "confidence": 0.75,
+        "evidence_clause_ids": [
+          "22.5"
+        ],
+        "needs_review": false,
+        "normalized_description": "visit vascular home",
+        "reason": "Confirmed: clause 22.5 defines an extended vascular home visit billed per visit; the only vascular home-visit candidate.",
+        "selected_service": "Extended Vascular Home Visit"
+      }
+    }
+  ],
+  "model": "z-ai/glm-5.3-flash",
+  "policy": {
+    "billed_price_excluded": true,
+    "candidate_limit": 5,
+    "minimum_confidence": 0.9,
+    "requires_classifier_verifier_agreement": true
+  },
+  "prompt_sha256": "4236a2be049d3407ef165e644865226a4a7402ca12df121b93c0da06ae3ed2b6",
+  "prompt_version": "hospital-2-service-mapping-v1",
+  "schema_version": 1
+}
