@@ -14,7 +14,9 @@ from insurance_auditing.agent import (
     OpenRouterAgent,
     ToolRegistry,
     build_audit_tools,
+    build_hospital_2_tools,
 )
+from insurance_auditing.contract_parser import load_hospital_2_contract
 from insurance_auditing.pricing import ContractAuditor
 
 
@@ -71,6 +73,21 @@ class ToolTests(unittest.TestCase):
         result = tools.invoke("read_workspace_file", '{"path":"../outside.txt"}')
         self.assertIn('"ok": false', result)
         self.assertIn("path must stay inside the data root", result)
+
+    def test_hospital_2_tool_returns_bounded_clause_backed_candidates(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        contract = load_hospital_2_contract(
+            root / "contracts" / "hospital_2" / "master_services_agreement.md"
+        )
+        tools = ToolRegistry(build_hospital_2_tools(root, contract))
+        result = tools.invoke(
+            "get_hospital_2_match_contexts",
+            '{"descriptions":["STD ISOL RM OCC"]}',
+        )
+        self.assertIn('"ok": true', result)
+        self.assertIn('"clause_id"', result)
+        self.assertNotIn("unit_price_cents", result)
+        self.assertNotIn("patient_id", result)
 
 
 class AgentLoopTests(unittest.TestCase):
