@@ -1,7 +1,10 @@
+from dataclasses import replace
 from pathlib import Path
 import unittest
 
 from insurance_auditing.contract_parser import load_hospital_1_contract
+from insurance_auditing.models import DEFAULT_PRICING_PIPELINE
+from insurance_auditing.pricing import ContractAuditor
 from insurance_auditing.service_matching import ServiceMatcher
 
 
@@ -25,6 +28,37 @@ class Hospital1ContractTests(unittest.TestCase):
         service = self.contract.services["Advanced Rheumatologic Laboratory Panel"]
         self.assertEqual(service.rate_cents, 14_775)
         self.assertEqual(service.daily_cap, 4)
+
+    def test_uses_explicit_complete_pricing_pipeline(self) -> None:
+        self.assertEqual(self.contract.pricing_pipeline, DEFAULT_PRICING_PIPELINE)
+        ContractAuditor(self.contract)
+
+    def test_rejects_an_incomplete_pricing_pipeline(self) -> None:
+        incomplete_contract = replace(
+            self.contract,
+            pricing_pipeline=DEFAULT_PRICING_PIPELINE[:-1],
+        )
+        with self.assertRaisesRegex(ValueError, "every pricing stage exactly once"):
+            ContractAuditor(incomplete_contract)
+
+    def test_executes_the_contract_pricing_pipeline_in_order(self) -> None:
+        reversed_pipeline = tuple(reversed(DEFAULT_PRICING_PIPELINE))
+        auditor = ContractAuditor(
+            replace(self.contract, pricing_pipeline=reversed_pipeline)
+        )
+        calls = []
+        auditor._apply_bundles = lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[0])
+        auditor._apply_premiums = lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[1])
+        auditor._apply_discounts = lambda contexts: calls.append(DEFAULT_PRICING_PIPELINE[2])
+        auditor._apply_caps = lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[3])
+        auditor._apply_exclusions = lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[4])
+        auditor._apply_duplicates = (
+            lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[5])
+        )
+
+        auditor._prepare_pricing([])
+
+        self.assertEqual(tuple(calls), reversed_pipeline)
 
     def test_matches_reordered_abbreviated_description(self) -> None:
         match = self.matcher.match(

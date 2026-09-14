@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
+from enum import Enum
 
 
 @dataclass(frozen=True, slots=True)
@@ -52,6 +53,53 @@ class AuditFinding:
     @property
     def flagged(self) -> bool:
         return bool(self.categories)
+
+
+@dataclass(frozen=True, slots=True)
+class RateCalculationStep:
+    stage: str
+    input_rate_cents: int | None
+    multiplier: str | None
+    output_rate_cents: int
+
+
+@dataclass(frozen=True, slots=True)
+class LineAuditDetail:
+    invoice_id: str
+    line_id: str
+    line_no: int
+    service_date: str
+    description: str
+    matched_service: str | None
+    match_score: float
+    match_margin: float
+    billed_unit_basis: str
+    contract_unit_basis: str | None
+    billed_quantity: int
+    expected_quantity: int
+    aggregate_daily_quantity: int | None
+    premium_threshold: int | None
+    cumulative_quantity_before: int | None
+    applied_discount_threshold: int | None
+    daily_cap: int | None
+    exclusion_window_days: int | None
+    billed_unit_price_cents: int
+    expected_unit_price_cents: int
+    billed_line_total_cents: int
+    calculated_billed_line_total_cents: int
+    expected_line_total_cents: int
+    rate_calculation: tuple[RateCalculationStep, ...]
+    categories: tuple[str, ...]
+    bundle_partner_line_ids: tuple[str, ...]
+    exclusion_trigger_line_ids: tuple[str, ...]
+    daily_cap_related_line_ids: tuple[str, ...]
+    duplicate_of_line_id: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class DetailedAuditResult:
+    findings: dict[str, AuditFinding]
+    line_details: dict[str, tuple[LineAuditDetail, ...]]
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,6 +155,30 @@ class ExclusionRule:
     trigger_service: str
 
 
+class PricingStage(str, Enum):
+    BUNDLE = "bundle"
+    PREMIUM = "premium"
+    DISCOUNT = "discount"
+    DAILY_CAP = "daily_cap"
+    EXCLUSION = "exclusion"
+    DUPLICATE = "duplicate"
+
+
+class DuplicateBillingPolicy(str, Enum):
+    MATCHING_LINE_ACROSS_INVOICES = "matching_line_across_invoices"
+    REPEATED_SERVICE_PER_PATIENT_DAY = "repeated_service_per_patient_day"
+
+
+DEFAULT_PRICING_PIPELINE = (
+    PricingStage.BUNDLE,
+    PricingStage.PREMIUM,
+    PricingStage.DISCOUNT,
+    PricingStage.DAILY_CAP,
+    PricingStage.EXCLUSION,
+    PricingStage.DUPLICATE,
+)
+
+
 @dataclass(frozen=True, slots=True)
 class ContractRules:
     identity: ContractIdentity
@@ -116,6 +188,10 @@ class ContractRules:
     volume_discounts: dict[str, tuple[VolumeDiscount, ...]]
     bundles: tuple[BundleRule, ...]
     exclusions: tuple[ExclusionRule, ...]
+    pricing_pipeline: tuple[PricingStage, ...] = DEFAULT_PRICING_PIPELINE
+    duplicate_billing_policy: DuplicateBillingPolicy = (
+        DuplicateBillingPolicy.MATCHING_LINE_ACROSS_INVOICES
+    )
 
 
 @dataclass(frozen=True, slots=True)

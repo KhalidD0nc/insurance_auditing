@@ -11,7 +11,7 @@ from insurance_auditing.evaluation import (
     load_labels,
 )
 from insurance_auditing.io import load_hospital
-from insurance_auditing.pricing import Hospital1Auditor
+from insurance_auditing.pricing import ContractAuditor
 
 
 class Hospital1RegressionTests(unittest.TestCase):
@@ -26,7 +26,7 @@ class Hospital1RegressionTests(unittest.TestCase):
 
     def test_full_contract_audit_on_development_set(self) -> None:
         root = Path(__file__).resolve().parents[1]
-        findings = Hospital1Auditor(
+        findings = ContractAuditor(
             load_hospital_1_contract(
                 root / "contracts" / "hospital_1" / "provider_services_agreement.md"
             )
