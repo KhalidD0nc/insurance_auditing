@@ -7,7 +7,11 @@ from pathlib import Path
 
 from .audit import StructuralAuditor
 from .contracts import contract_for_hospital
-from .contract_parser import load_hospital_1_contract, load_hospital_4_contract
+from .contract_parser import (
+    load_hospital_1_contract,
+    load_hospital_2_contract,
+    load_hospital_4_contract,
+)
 from .evaluation import (
     evaluate_categories,
     evaluate_flags,
@@ -16,6 +20,12 @@ from .evaluation import (
     metrics_as_dict,
 )
 from .io import load_hospital
+from .hospital_2_mappings import (
+    DEFAULT_MAPPING_PATH,
+    load_hospital_2_mapping_artifact,
+    prepare_hospital_2_mappings,
+    write_json_atomic,
+)
 from .pricing import ContractAuditor
 from .reporting import build_audit_report
 from .submission import build_hospital_4_submission_rows, write_submission_rows
@@ -60,11 +70,111 @@ def _parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("submission.csv"),
     )
+    hospital_2_mappings = subparsers.add_parser(
+        "prepare-hospital-2-mappings",
+        help="classify ambiguous Hospital 2 descriptions with the audit agent",
+    )
+    hospital_2_mappings.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_2_mappings.add_argument("--output", type=Path, default=DEFAULT_MAPPING_PATH)
+    hospital_2_mappings.add_argument("--refresh", action="store_true")
+    hospital_2_mappings.add_argument("--batch-size", type=int, default=20)
+    hospital_2 = subparsers.add_parser(
+        "audit-hospital-2",
+        help="produce an offline line-level Hospital 2 review report",
+    )
+    hospital_2.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_2.add_argument("--mappings", type=Path, default=DEFAULT_MAPPING_PATH)
+    hospital_2.add_argument(
+        "--output", type=Path, default=Path("hospital_2_audit_report.json")
+    )
+    hospital_2.add_argument("--include-correct", action="store_true")
     return parser
+
+
+def _beneath_data_root(data_root: Path, path: Path) -> Path:
+    return path if path.is_absolute() else data_root / path
 
 
 def main() -> None:
     args = _parser().parse_args()
+    if args.command == "prepare-hospital-2-mappings":
+        contract_path = (
+            args.data_root
+            / "contracts"
+            / "hospital_2"
+            / "master_services_agreement.md"
+        )
+        contract = load_hospital_2_contract(contract_path)
+        output_path = _beneath_data_root(args.data_root, args.output)
+        artifact = prepare_hospital_2_mappings(
+            args.data_root,
+            contract,
+            output_path,
+            refresh=args.refresh,
+            batch_size=args.batch_size,
+        )
+        print(
+            json.dumps(
+                {
+                    "hospital": 2,
+                    "output": str(output_path.resolve()),
+                    "accepted": sum(
+                        entry["status"] == "accepted"
+                        for entry in artifact["mappings"]
+                    ),
+                    "unresolved": sum(
+                        entry["status"] == "unresolved"
+                        for entry in artifact["mappings"]
+                    ),
+                    "model": artifact["model"],
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return
+
+    if args.command == "audit-hospital-2":
+        contract_path = (
+            args.data_root
+            / "contracts"
+            / "hospital_2"
+            / "master_services_agreement.md"
+        )
+        contract = load_hospital_2_contract(contract_path)
+        mapping_path = _beneath_data_root(args.data_root, args.mappings)
+        mappings, artifact = load_hospital_2_mapping_artifact(
+            mapping_path, contract
+        )
+        dataset = load_hospital(args.data_root, 2)
+        result = ContractAuditor(
+            contract,
+            mappings,
+            conservative_matching=True,
+        ).audit_detailed(dataset)
+        report = build_audit_report(
+            dataset,
+            result,
+            include_correct=args.include_correct,
+            hide_incomplete_expected_totals=True,
+            contract_source_sha256=contract.source_sha256,
+            mapping_artifact=artifact,
+        )
+        output_path = _beneath_data_root(args.data_root, args.output)
+        write_json_atomic(output_path, report)
+        print(
+            json.dumps(
+                {
+                    "hospital": 2,
+                    "output": str(output_path.resolve()),
+                    **report["summary"],
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return
+
     if args.command == "evaluate-hospital-1":
         contract_path = (
             args.data_root / "contracts" / "hospital_1" / "provider_services_agreement.md"
