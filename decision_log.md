@@ -96,3 +96,37 @@ amount ambiguity: all four flags were correct, but none of their labelled totals
 equalled the maximum contractually payable quantity. The Hospital 4 submission
 therefore reports the auditable contractual maximum and exposes the uncertainty
 through confidence instead of learning the hidden corruption quantity.
+
+## Hospital 2 implementation decisions
+
+### Prose contract and discount count
+
+Hospital 2 distributes 76 service rules across numbered prose clauses. The
+parser requires the complete expected structure and records a SHA-256 of the
+contract plus clause provenance for each rule. The contract contains twelve
+payable cumulative-discount thresholds. A thirteenth search hit is Article
+III's general definition and ordering rule, not a service threshold, so no
+synthetic discount was created to satisfy that textual count.
+
+### Conservative semantic mappings
+
+Hospital 2 matching does not use billed prices as evidence because a corrupted
+price must not change service identity. Tied and low-margin deterministic
+matches enter a normalized-description review queue. The OpenRouter classifier
+and verifier see only five canonical candidates with unit basis and clause
+references. A mapping is accepted only when both passes agree, both cite the
+selected clause, neither requests review, and their lower confidence is at
+least 0.90. Every other result remains `unknown_service`.
+
+The live `z-ai/glm-5.3-flash` run accepted six mappings and left 81 unresolved.
+The accepted set covers 313 reported line occurrences. Provider timeouts,
+invalid JSON, and empty completions were retained as explicit failures rather
+than retried into a desired answer.
+
+### Incomplete expected totals
+
+Unknown lines remain flagged but are not repriced from an invented identity.
+Only 130 of 1,125 Hospital 2 invoice identifiers currently have complete
+pricing. The preliminary report therefore emits null expected totals and
+differences for every incomplete invoice. It is evidence for review and is not
+eligible for submission generation.

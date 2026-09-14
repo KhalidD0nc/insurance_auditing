@@ -161,6 +161,33 @@ daily-cap cases where the labels imply an unobserved quantity below the
 contractual maximum; the chosen non-overfitting treatment is recorded in
 `decision_log.md`.
 
+Prepare the versioned semantic mapping for Hospital 2:
+
+```bash
+python3 -m insurance_auditing prepare-hospital-2-mappings
+```
+
+This is the only Hospital 2 command that calls OpenRouter. It groups ambiguous
+normalised descriptions, gives the agent a bounded contract candidate set, and
+requires an independent classifier and verifier to agree at confidence 0.90 or
+higher. Accepted and unresolved decisions are written atomically to
+`mappings/hospital_2_service_mappings.json`. Re-running the command fills only
+missing entries; pass `--refresh` to re-evaluate existing entries.
+
+Generate the Hospital 2 audit offline from that reviewed artifact:
+
+```bash
+python3 -m insurance_auditing audit-hospital-2
+```
+
+The command writes `hospital_2_audit_report.json`. Contract parsing, rule
+validation, pricing, rounding and invoice findings are deterministic. The
+report includes clause and mapping provenance, and marks each invoice with
+`pricing_complete`. An invoice containing any unresolved service has a null
+`expected_total_cents` and `difference_cents`; the billed amount is never
+silently presented as its expected amount. This preliminary report does not
+create or update `submission.csv`.
+
 Generate the preliminary line-level Hospital 4 review report:
 
 ```bash
