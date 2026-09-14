@@ -116,6 +116,16 @@ see how you worked, not just what you produced.
 - If something in a contract seems genuinely ambiguous, it may well be. Record
   your reading and move on; do not spend the budget on it.
 
+## Audit flow
+
+![Hospital contract audit flow](Audit_Flow_Design.png)
+
+Contracts are normalized into validated rules, while invoice descriptions take
+a deterministic matching path first. Only ambiguous descriptions reach
+`z-ai/glm-5.3-flash`; accepted mappings pass a conservative validation gate
+before entering the deterministic pricing engine. Unresolved mappings fail
+closed, and all financial calculations and final flags remain in Python.
+
 ## Candidate implementation
 
 The implementation is being built in auditable layers. The first layer performs
@@ -159,7 +169,8 @@ with no false positives, all labelled error categories are reproduced, and 909
 of 913 expected totals match exactly. The four amount differences are all
 daily-cap cases where the labels imply an unobserved quantity below the
 contractual maximum; the chosen non-overfitting treatment is recorded in
-`decision_log.md`.
+`decision_log.md`. Full per-category metrics and grouped failure analysis are
+provided in `evaluation_report.md`.
 
 Prepare the versioned semantic mapping for Hospital 2:
 
@@ -167,12 +178,14 @@ Prepare the versioned semantic mapping for Hospital 2:
 python3 -m insurance_auditing prepare-hospital-2-mappings
 ```
 
-This is the only Hospital 2 command that calls OpenRouter. It groups ambiguous
-normalised descriptions, gives the agent a bounded contract candidate set, and
-requires an independent classifier and verifier to agree at confidence 0.90 or
-higher. Accepted and unresolved decisions are written atomically to
-`mappings/hospital_2_service_mappings.json`. Re-running the command fills only
-missing entries; pass `--refresh` to re-evaluate existing entries.
+This is the only Hospital 2 command that calls an external model. It sends
+requests to `z-ai/glm-5.3-flash` through the OpenRouter API provider, groups
+ambiguous normalised descriptions, gives the model a bounded contract candidate
+set, and requires independent classifier and verifier passes to agree at
+confidence 0.90 or higher. Accepted and unresolved decisions are written
+atomically to `mappings/hospital_2_service_mappings.json`. Re-running the
+command fills only missing entries; pass `--refresh` to re-evaluate existing
+entries.
 
 Generate the Hospital 2 audit offline from that reviewed artifact:
 
@@ -216,9 +229,38 @@ The write is atomic and preserves any existing rows whose invoice identifier
 does not start with `INV-H4-`. Confidence is calibrated by ambiguity type as
 documented in `decision_log.md`.
 
-## OpenRouter audit agent
+## LLM audit agent
 
-An internal, tool-using OpenRouter agent is available in
-`insurance_auditing/agent`. Other modules can call `run_agent()` and supply the
-built-in audit tools or their own `AgentTool` functions. It uses
-`z-ai/glm-5.3-flash`; see `insurance_auditing/agent/README.md` for usage.
+An internal, tool-using audit agent is available in `insurance_auditing/agent`.
+Other modules can call `run_agent()` and supply the built-in audit tools or
+their own `AgentTool` functions. It uses `z-ai/glm-5.3-flash`; OpenRouter is the
+configured API transport provider. See `insurance_auditing/agent/README.md` for
+usage.
+
+## Future work: reusable and locally deployable
+
+The current OpenRouter integration is an evaluation path, not the intended
+long-term hosting architecture. It lets us prove that `z-ai/glm-5.3-flash` is
+reliable enough for semantic service matching before deploying the model
+locally. The model was selected because it can run without high-cost hardware,
+making private, low-cost inference a practical next step.
+
+The hospital-specific workflow can then become a reusable contract-onboarding
+pipeline:
+
+1. Parse each new contract into normalized `ContractRules` and validate every
+   rule against its source clause.
+2. Index canonical services using embeddings and group ambiguous descriptions
+   into semantic clusters, allowing one reviewed mapping to resolve many
+   repeated line items.
+3. Accept a mapping automatically only when the classifier and verifier agree,
+   confidence is high, and the evidence points to a valid contract clause.
+   Route every other cluster to human review.
+4. Fingerprint each contract and invalidate its mappings whenever the source
+   terms change.
+5. Move semantic inference from OpenRouter to a local
+   `z-ai/glm-5.3-flash` deployment once the evaluation criteria are met.
+
+The deployment can change without changing the audit boundary: the model only
+interprets ambiguous text. Contract validation, pricing, rounding, totals, and
+final audit findings remain deterministic in Python.
