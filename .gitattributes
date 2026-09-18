@@ -3,3 +3,7 @@
 # end-of-line conversion so that a clone is identical on every platform and
 # the PDFs survive checkout on Windows.
 * -text
+
+# Python's CSV writer uses the RFC-compatible CRLF record separator. Treat the
+# carriage return as part of the line ending when checking CSV whitespace.
+*.csv whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

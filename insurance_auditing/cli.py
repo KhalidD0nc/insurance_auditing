@@ -28,7 +28,11 @@ from .hospital_2_mappings import (
 )
 from .pricing import ContractAuditor
 from .reporting import build_audit_report
-from .submission import build_hospital_4_submission_rows, write_submission_rows
+from .submission import (
+    build_hospital_2_submission_rows,
+    build_hospital_4_submission_rows,
+    write_submission_rows,
+)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -88,6 +92,19 @@ def _parser() -> argparse.ArgumentParser:
         "--output", type=Path, default=Path("hospital_2_audit_report.json")
     )
     hospital_2.add_argument("--include-correct", action="store_true")
+    hospital_2_submission = subparsers.add_parser(
+        "generate-hospital-2-submission",
+        help="write pricing-complete Hospital 2 predictions to the submission CSV",
+    )
+    hospital_2_submission.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_2_submission.add_argument(
+        "--mappings", type=Path, default=DEFAULT_MAPPING_PATH
+    )
+    hospital_2_submission.add_argument(
+        "--output",
+        type=Path,
+        default=Path("submission.csv"),
+    )
     return parser
 
 
@@ -168,6 +185,43 @@ def main() -> None:
                     "hospital": 2,
                     "output": str(output_path.resolve()),
                     **report["summary"],
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return
+
+    if args.command == "generate-hospital-2-submission":
+        contract_path = (
+            args.data_root
+            / "contracts"
+            / "hospital_2"
+            / "master_services_agreement.md"
+        )
+        contract = load_hospital_2_contract(contract_path)
+        mapping_path = _beneath_data_root(args.data_root, args.mappings)
+        mappings, _ = load_hospital_2_mapping_artifact(mapping_path, contract)
+        dataset = load_hospital(args.data_root, 2)
+        result = ContractAuditor(
+            contract,
+            mappings,
+            conservative_matching=True,
+        ).audit_detailed(dataset)
+        rows = build_hospital_2_submission_rows(result)
+        write_submission_rows(
+            args.output,
+            rows,
+            replace_invoice_prefix="INV-H2-",
+        )
+        print(
+            json.dumps(
+                {
+                    "hospital": 2,
+                    "output": str(args.output.resolve()),
+                    "rows": len(rows),
+                    "flagged": sum(row["flagged"] == "1" for row in rows),
+                    "skipped_incomplete": len(result.findings) - len(rows),
                 },
                 indent=2,
                 sort_keys=True,

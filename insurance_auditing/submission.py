@@ -22,6 +22,8 @@ SUBMISSION_COLUMNS = (
 def _confidence(
     finding: AuditFinding,
     details: tuple[LineAuditDetail, ...],
+    *,
+    maximum: Decimal = Decimal("1"),
 ) -> Decimal:
     confidence = Decimal("0.96") if finding.flagged else Decimal("0.97")
     categories = set(finding.categories)
@@ -46,7 +48,49 @@ def _confidence(
     elif not finding.flagged and weak_matched_details:
         confidence = min(confidence, Decimal("0.95"))
 
-    return confidence
+    return min(confidence, maximum)
+
+
+def _submission_row(
+    finding: AuditFinding,
+    details: tuple[LineAuditDetail, ...],
+    *,
+    maximum_confidence: Decimal = Decimal("1"),
+) -> dict[str, str]:
+    return {
+        "invoice_id": finding.invoice_id,
+        "flagged": "1" if finding.flagged else "0",
+        "error_category": "|".join(finding.categories),
+        "expected_total_cents": str(finding.expected_total_cents),
+        "billed_total_cents": str(finding.billed_total_cents),
+        "confidence": format(
+            _confidence(finding, details, maximum=maximum_confidence),
+            ".2f",
+        ),
+    }
+
+
+def build_hospital_2_submission_rows(
+    result: DetailedAuditResult,
+) -> list[dict[str, str]]:
+    """Build rows only for invoices whose service pricing is fully resolved."""
+
+    rows = []
+    for finding in sorted(
+        result.findings.values(),
+        key=lambda item: item.canonical_invoice_row,
+    ):
+        details = result.line_details.get(finding.invoice_id, ())
+        if not details or any(detail.matched_service is None for detail in details):
+            continue
+        rows.append(
+            _submission_row(
+                finding,
+                details,
+                maximum_confidence=Decimal("0.90"),
+            )
+        )
+    return rows
 
 
 def build_hospital_4_submission_rows(
@@ -58,16 +102,7 @@ def build_hospital_4_submission_rows(
         key=lambda item: item.canonical_invoice_row,
     ):
         details = result.line_details.get(finding.invoice_id, ())
-        rows.append(
-            {
-                "invoice_id": finding.invoice_id,
-                "flagged": "1" if finding.flagged else "0",
-                "error_category": "|".join(finding.categories),
-                "expected_total_cents": str(finding.expected_total_cents),
-                "billed_total_cents": str(finding.billed_total_cents),
-                "confidence": format(_confidence(finding, details), ".2f"),
-            }
-        )
+        rows.append(_submission_row(finding, details))
     return rows
 
 
