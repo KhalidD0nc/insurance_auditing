@@ -3,9 +3,9 @@
 ## Scope and safety boundary
 
 Hospital 1 was used only as labelled development data. Hospital 4 was selected
-for the final submission because its contract could be represented and tested
-deterministically. Hospital 2 was investigated but withheld from submission
-because unresolved service descriptions prevent authoritative totals.
+for complete submission coverage because its contract could be represented and
+tested deterministically. Hospital 2 is submitted only where every service on
+an invoice has an authoritative match; unresolved invoices remain excluded.
 Hospitals 3 and 5 were not attempted within the assessment time budget.
 
 AI assistance was used and all prompts are retained in `prompts/`. For Hospital
@@ -43,7 +43,9 @@ definition. Ambiguous descriptions are reviewed by independent classifier and
 verifier passes and accepted only when they agree, cite the selected clause,
 and both reach 0.90 confidence. The live run accepted six mappings and left 81
 normalised descriptions unresolved. Consequently, only 130 of 1,125 invoices
-have complete pricing and Hospital 2 is excluded from `submission.csv`.
+have complete pricing. Those 130 invoices are included in `submission.csv`;
+the other 995 are excluded, and Hospital 2 confidence is capped at 0.90 because
+there is no labelled calibration set.
 
 **Hospital 4.** Section 11.3 prohibits repeat billing of the same service for
 the same patient and date, including across invoices; later repetitions are
@@ -55,7 +57,7 @@ matches on flagged lines, and 0.72 for daily-cap findings.
 
 ## Unresolved work
 
-Hospital 2 requires human review of unresolved mappings before submission.
+Hospital 2 requires human review of unresolved mappings before full coverage.
 With additional time, the next sequence would be to finish that mapping review,
 then implement and validate Hospital 3 and Hospital 5 independently. No totals
 will be invented merely to increase coverage.

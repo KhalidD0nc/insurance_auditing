@@ -198,8 +198,19 @@ validation, pricing, rounding and invoice findings are deterministic. The
 report includes clause and mapping provenance, and marks each invoice with
 `pricing_complete`. An invoice containing any unresolved service has a null
 `expected_total_cents` and `difference_cents`; the billed amount is never
-silently presented as its expected amount. This preliminary report does not
-create or update `submission.csv`.
+silently presented as its expected amount.
+
+Add only pricing-complete Hospital 2 invoices to the submission:
+
+```bash
+python3 -m insurance_auditing generate-hospital-2-submission \
+  --output submission.csv
+```
+
+The command atomically replaces existing `INV-H2-` rows, preserves rows for
+other hospitals, and excludes every invoice containing an unresolved service.
+Hospital 2 confidence is capped at 0.90 because it has no labelled calibration
+set.
 
 Generate the preliminary line-level Hospital 4 review report:
 

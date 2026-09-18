@@ -82,10 +82,10 @@ across the full development set.
 
 ## Submission scope
 
-`submission.csv` contains all 835 Hospital 4 invoice identifiers. Hospital 2
-was parsed and audited, but only 130 of 1,125 identifiers currently have
-complete pricing because 2,405 line items remain unresolved; it was therefore
-withheld rather than submitted with invented totals. Hospitals 3 and 5 were not
-attempted within the time budget. The next step would be human review of the
-Hospital 2 mapping queue, followed by Hospital 3 and Hospital 5 contract
-parsers if more time were available.
+`submission.csv` contains all 835 Hospital 4 invoice identifiers and the 130
+Hospital 2 identifiers whose pricing is complete. The remaining 995 Hospital 2
+identifiers are excluded because 2,405 line items remain unresolved; no totals
+are invented for them. Hospitals 3 and 5 were not attempted within the time
+budget. The next step would be human review of the Hospital 2 mapping queue,
+followed by Hospital 3 and Hospital 5 contract parsers if more time were
+available.
