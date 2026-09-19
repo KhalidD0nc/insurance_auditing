@@ -2,10 +2,9 @@
 
 ## Scope and safety boundary
 
-Hospital 1 was used only as labelled development data. Hospitals 2, 3, and 4
-now have complete invoice coverage because their contracts can be represented
-and tested deterministically. Hospital 5 was not attempted within the initial
-assessment time budget.
+Hospital 1 was used only as labelled development data. Hospitals 2, 3, 4, and
+5 now have complete invoice coverage because their contracts can be represented
+and tested deterministically.
 
 AI assistance was used and all prompts are retained in `prompts/`. For Hospital
 2, the LLM handles only semantic interpretation. Contract rules, arithmetic,
@@ -66,9 +65,22 @@ Fourteen contradictory lines remain `unknown_service`. All 932 invoice
 identifiers are submitted; unknown-service rows are capped at 0.70 confidence
 and other rows at 0.90.
 
-## Unresolved work
+**Hospital 5.** The effective unit rate is calculated strictly as bundle
+substitution, facility multiplier, plan-tier multiplier, premium or
+non-business-day uplift, and cumulative discount, with half-up rounding after
+each step. The invoice-level facility code supplies the network column because
+it is the facility field present in the provided dataset. All 84 services must
+appear exactly once in both multiplier tables. One recurring abbreviated
+description is mapped only because all 21 occurrences have the documented
+`per_visit` basis and rates reachable from Comprehensive Palliative
+Consultation under the network multipliers. Twelve one-off descriptions name
+services absent from Table 1 and remain `unknown_service`. All 1,050 invoice
+identifiers are submitted; unknown-service rows are capped at 0.70 confidence
+and all other rows at 0.90.
 
-Hospitals 2, 3, and 4 are complete at invoice level. The next step is to
-implement and validate Hospital 5 independently. No contract rate is invented
-for contradictory descriptions merely to increase apparent pricing
-completeness.
+## Remaining delivery work
+
+All scored hospitals are complete at invoice level. The remaining step is a
+final repository and submission reproducibility check before sharing the
+updated repository. No contract rate is invented for contradictory or
+non-contract descriptions merely to increase apparent pricing completeness.

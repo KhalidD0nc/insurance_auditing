@@ -23,6 +23,13 @@ accepting each substitution. Safe token and unit-basis matching resolves most
 descriptions; six recurring ties use a versioned aggregate contract-evidence
 artifact, while contradictory one-off descriptions stay unknown.
 
+Hospital 5 is also fully offline. Its parser validates 84 base rates and the
+corresponding facility and plan-tier multiplier rows, then applies bundle,
+facility, tier, premium or weekend uplift, and cumulative discount adjustments
+in the stated order with half-up rounding after every step. One recurring
+abbreviation is supported by aggregate basis and network-rate evidence;
+twelve one-off descriptions naming non-contract services remain unknown.
+
 ## Results
 
 The audit classified all 913 Hospital 1 invoice identifiers correctly: 58 true
@@ -90,9 +97,11 @@ across the full development set.
 
 ## Submission scope
 
-`submission.csv` contains all 835 Hospital 4 invoice identifiers, all 1,125
-Hospital 2 identifiers, and all 932 Hospital 3 identifiers. Hospital 2 has 76
-flagged invoices and Hospital 3 has 70. In each unlabelled hospital, fourteen
-contradictory descriptions across 13 invoices remain `unknown_service` with a
-0.70 confidence cap. Other Hospital 2 and Hospital 3 rows are capped at 0.90.
-Hospital 5 remains the next implementation target.
+`submission.csv` contains all 3,942 scored invoice identifiers: 1,125 from
+Hospital 2, 932 from Hospital 3, 835 from Hospital 4, and 1,050 from Hospital 5.
+The respective flagged counts are 76, 70, 63, and 76. Hospital 2 and Hospital 3
+each retain fourteen contradictory lines across 13 invoices; Hospital 5
+retains twelve one-off non-contract descriptions across 12 invoices. Those
+rows have a 0.70 confidence cap. Other Hospital 2, Hospital 3, and Hospital 5
+rows are capped at 0.90 because those hospitals have no labelled calibration
+set.

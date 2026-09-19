@@ -267,6 +267,32 @@ The write is atomic and preserves any existing rows whose invoice identifier
 does not start with `INV-H4-`. Confidence is calibrated by ambiguity type as
 documented in `decision_log.md`.
 
+Generate the Hospital 5 offline audit report:
+
+```bash
+python3 -m insurance_auditing audit-hospital-5
+```
+
+Hospital 5 applies the substituted bundle rate first, then the service's
+facility multiplier, plan-tier multiplier, premium or weekend uplift, and
+cumulative discount. Every intermediate result is rounded half up to a whole
+cent. The parser validates all 84 services against both network multiplier
+tables and retains the contract fingerprint and reviewed mapping provenance in
+the report. Twelve one-off descriptions name services absent from the contract
+and remain explicit `unknown_service` findings.
+
+Generate complete Hospital 5 submission coverage:
+
+```bash
+python3 -m insurance_auditing generate-hospital-5-submission \
+  --output submission.csv
+```
+
+The command atomically replaces `INV-H5-` rows while preserving every other
+hospital. It emits all 1,050 unique Hospital 5 invoice identifiers. Rows with
+unknown services are capped at 0.70 confidence and all other Hospital 5 rows
+at 0.90 because no labelled calibration set is available.
+
 ## LLM audit agent
 
 An internal, tool-using audit agent is available in `insurance_auditing/agent`.
