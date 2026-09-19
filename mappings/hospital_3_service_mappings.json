@@ -1,0 +1,82 @@
+{
+  "contract_sha256": "fe26c4d2698b33bb27c8305e3ef8363cb7202fdc5729bbbc1f072c3a1df54d78",
+  "hospital": 3,
+  "mappings": [
+    {
+      "confidence": 0.9,
+      "evidence_clause_id": "B.1",
+      "normalized_description": "advanced telemetry monitoring",
+      "observations": {
+        "line_count": 18,
+        "observed_rates_cents": [41000],
+        "unit_basis": "per_day"
+      },
+      "reason": "All occurrences use the Advanced Paediatric Telemetry Monitoring rate; none uses the gastrointestinal rate.",
+      "selected_service": "Advanced Paediatric Telemetry Monitoring"
+    },
+    {
+      "confidence": 0.9,
+      "evidence_clause_id": "B.1",
+      "normalized_description": "inpatient theatre time",
+      "observations": {
+        "line_count": 13,
+        "observed_rates_cents": [9250],
+        "unit_basis": "per_hour"
+      },
+      "reason": "All occurrences use the Inpatient Musculoskeletal Theatre Time rate; none uses the metabolic rate.",
+      "selected_service": "Inpatient Musculoskeletal Theatre Time"
+    },
+    {
+      "confidence": 0.9,
+      "evidence_clause_id": "B.1",
+      "normalized_description": "occupancy continuous isolation room",
+      "observations": {
+        "line_count": 21,
+        "observed_rates_cents": [116275],
+        "unit_basis": "per_day"
+      },
+      "reason": "All occurrences use the Continuous Immunologic Isolation Room Occupancy rate; none uses the renal rate.",
+      "selected_service": "Continuous Immunologic Isolation Room Occupancy"
+    },
+    {
+      "confidence": 0.9,
+      "evidence_clause_id": "B.1",
+      "normalized_description": "postoperative pulmonary",
+      "observations": {
+        "line_count": 21,
+        "observed_rates_cents": [26750, 33438],
+        "unit_basis": "per_visit"
+      },
+      "reason": "Occurrences use the Postoperative Pulmonary Consultation base or documented weekend-uplift rate.",
+      "selected_service": "Postoperative Pulmonary Consultation"
+    },
+    {
+      "confidence": 0.9,
+      "evidence_clause_id": "B.1",
+      "normalized_description": "psychiatric routine",
+      "observations": {
+        "line_count": 12,
+        "observed_rates_cents": [282975],
+        "unit_basis": "per_procedure"
+      },
+      "reason": "All occurrences use the Routine Psychiatric Consultation contract basis and rate.",
+      "selected_service": "Routine Psychiatric Consultation"
+    },
+    {
+      "confidence": 0.9,
+      "evidence_clause_id": "B.1",
+      "normalized_description": "pulmonary postoperative",
+      "observations": {
+        "line_count": 10,
+        "observed_rates_cents": [26750, 33438],
+        "unit_basis": "per_visit"
+      },
+      "reason": "Word-order variant whose occurrences use the Postoperative Pulmonary Consultation base or weekend-uplift rate.",
+      "selected_service": "Postoperative Pulmonary Consultation"
+    }
+  ],
+  "prompt_path": "prompts/010_hospital_3_service_review.md",
+  "prompt_sha256": "c33b18dfdbc03a12bc019c6da894df46f1b930625dc486a62db5dfc622b9c205",
+  "review_method": "aggregate_contract_rate_tiebreaker",
+  "schema_version": 1
+}
