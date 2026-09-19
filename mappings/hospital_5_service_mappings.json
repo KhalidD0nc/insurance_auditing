@@ -1,0 +1,22 @@
+{
+  "contract_sha256": "cbdd2f9c2bc3b31e6ba8f3ae1c4910e6e9aba79970df333500d886b0e5f83ffa",
+  "hospital": 5,
+  "mappings": [
+    {
+      "confidence": 0.9,
+      "evidence_clause_id": "4",
+      "normalized_description": "comprehensive consultation",
+      "observations": {
+        "line_count": 21,
+        "observed_rates_cents": [33858, 35050, 35961, 36803, 37854, 39747],
+        "unit_basis": "per_visit"
+      },
+      "reason": "All occurrences use the Comprehensive Palliative Consultation basis and rates produced by its documented facility and plan-tier multipliers.",
+      "selected_service": "Comprehensive Palliative Consultation"
+    }
+  ],
+  "prompt_path": "prompts/011_hospital_5_service_review.md",
+  "prompt_sha256": "3139802938efb1e740cbf3bed5c7583222cae422ac79ff0006da07c75f35706f",
+  "review_method": "aggregate_network_rate_tiebreaker",
+  "schema_version": 1
+}
