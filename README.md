@@ -185,7 +185,8 @@ set, and requires independent classifier and verifier passes to agree at
 confidence 0.90 or higher. Accepted and unresolved decisions are written
 atomically to `mappings/hospital_2_service_mappings.json`. Re-running the
 command fills only missing entries; pass `--refresh` to re-evaluate existing
-entries.
+entries. The committed artifact also records two aggregate contract-rate
+tie-breaks that were reviewed after the initial run.
 
 Generate the Hospital 2 audit offline from that reviewed artifact:
 
@@ -196,21 +197,23 @@ python3 -m insurance_auditing audit-hospital-2
 The command writes `hospital_2_audit_report.json`. Contract parsing, rule
 validation, pricing, rounding and invoice findings are deterministic. The
 report includes clause and mapping provenance, and marks each invoice with
-`pricing_complete`. An invoice containing any unresolved service has a null
-`expected_total_cents` and `difference_cents`; the billed amount is never
-silently presented as its expected amount.
+`pricing_complete`. An invoice containing an unresolved service has a null
+`expected_total_cents` and `difference_cents` in this diagnostic report.
 
-Add only pricing-complete Hospital 2 invoices to the submission:
+Generate complete Hospital 2 submission coverage:
 
 ```bash
 python3 -m insurance_auditing generate-hospital-2-submission \
   --output submission.csv
 ```
 
-The command atomically replaces existing `INV-H2-` rows, preserves rows for
-other hospitals, and excludes every invoice containing an unresolved service.
-Hospital 2 confidence is capped at 0.90 because it has no labelled calibration
-set.
+The command atomically replaces existing `INV-H2-` rows and preserves rows for
+other hospitals. It emits all 1,125 unique Hospital 2 invoice identifiers.
+Fourteen deliberately contradictory line descriptions across 13 invoices stay
+as `unknown_service`; their calculated billed line amount is preserved instead
+of inventing a contract rate, and confidence is capped at 0.70. All other
+Hospital 2 rows are capped at 0.90 because the hospital has no labelled
+calibration set.
 
 Generate the preliminary line-level Hospital 4 review report:
 

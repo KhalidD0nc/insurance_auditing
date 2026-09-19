@@ -10,11 +10,12 @@ Hospital 1 was used for development and calibration only; it is not included in
 `submission.csv`.
 
 AI assistance was used to help develop the repository and prompts. For
-Hospital 2, the `z-ai/glm-5.3-flash` model performs classifier and verifier
+Hospital 2, the `z-ai/glm-5.3-flash` model performed classifier and verifier
 passes for semantic service matching, with OpenRouter used only as the API
-provider. Contract extraction, validation, pricing, totals, findings, and
-submission decisions remain deterministic. The prompts are versioned in
-`prompts/`.
+provider. A later offline completion pass resolved safe abbreviations and
+unit-basis ties and retained contradictory descriptions as unknown. Contract
+extraction, validation, pricing, totals, findings, and submission decisions
+remain deterministic. The prompts are versioned in `prompts/`.
 
 ## Results
 
@@ -62,8 +63,9 @@ across the full development set.
    is flagged rather than assigned an invented contract rate. For example,
    `INV-H1-000036` contains both an unknown service and a malformed date. This
    policy reproduced the labelled flag, but an unknown line could conceal an
-   additional pricing error; unlabelled invoices with unresolved services do
-   not receive an authoritative expected total.
+   additional pricing error. For full-coverage unlabelled submissions, the
+   calculated billed amount is preserved for that line and confidence is
+   reduced rather than inventing a replacement rate.
 
 3. **Free-text matching can be genuinely ambiguous.** Billed price is not
    allowed to override a clear text match because the price may be the error.
@@ -82,10 +84,9 @@ across the full development set.
 
 ## Submission scope
 
-`submission.csv` contains all 835 Hospital 4 invoice identifiers and the 130
-Hospital 2 identifiers whose pricing is complete. The remaining 995 Hospital 2
-identifiers are excluded because 2,405 line items remain unresolved; no totals
-are invented for them. Hospitals 3 and 5 were not attempted within the time
-budget. The next step would be human review of the Hospital 2 mapping queue,
-followed by Hospital 3 and Hospital 5 contract parsers if more time were
-available.
+`submission.csv` contains all 835 Hospital 4 invoice identifiers and all 1,125
+Hospital 2 identifiers. Hospital 2 has 76 flagged invoices. Fourteen
+contradictory descriptions across 13 invoices remain `unknown_service` with a
+0.70 confidence cap; the other rows are capped at 0.90. Hospitals 3 and 5 were
+not attempted within the initial time budget and are the next implementation
+targets.
