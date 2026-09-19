@@ -300,33 +300,60 @@ def load_hospital_2_mapping_artifact(
             or confidence < MINIMUM_LLM_CONFIDENCE
         ):
             raise ValueError(f"accepted mapping confidence is invalid for {key!r}")
-        if not isinstance(classifier, dict) or not isinstance(verifier, dict):
-            raise ValueError(f"accepted mapping lacks two-pass evidence for {key!r}")
         clause_id = contract.services[service_name].clause_id
-        for label, decision in (("classifier", classifier), ("verifier", verifier)):
-            decision_confidence = decision.get("confidence")
-            decision_evidence = decision.get("evidence_clause_ids")
-            if (
-                decision.get("normalized_description") != key
-                or decision.get("selected_service") != service_name
-                or decision.get("needs_review") is not False
-                or isinstance(decision_confidence, bool)
-                or not isinstance(decision_confidence, (int, float))
-                or decision_confidence < MINIMUM_LLM_CONFIDENCE
-                or not isinstance(decision_evidence, list)
-                or not all(isinstance(item, str) for item in decision_evidence)
-                or clause_id not in decision_evidence
-            ):
-                raise ValueError(f"accepted {label} evidence is invalid for {key!r}")
         if service_name not in {
             candidate["service_name"] for candidate in candidates
         }:
             raise ValueError(f"accepted service is outside candidates for {key!r}")
-        expected_confidence = min(
-            float(classifier["confidence"]), float(verifier["confidence"])
-        )
-        if abs(float(confidence) - expected_confidence) > 1e-12:
-            raise ValueError(f"accepted mapping confidence is inconsistent for {key!r}")
+
+        review_method = entry.get("review_method", "two_pass_llm")
+        if review_method == "aggregate_rate_tiebreaker":
+            evidence = entry.get("evidence_clause_ids")
+            observations = entry.get("review_observations")
+            if (
+                classifier is not None
+                or verifier is not None
+                or not isinstance(entry.get("review_reason"), str)
+                or not entry["review_reason"]
+                or not isinstance(evidence, list)
+                or clause_id not in evidence
+                or not isinstance(observations, dict)
+                or not isinstance(observations.get("line_count"), int)
+                or observations["line_count"] <= 0
+                or not isinstance(observations.get("unit_basis"), str)
+                or not isinstance(observations.get("observed_rates_cents"), list)
+                or not observations["observed_rates_cents"]
+                or not all(
+                    isinstance(rate, int)
+                    for rate in observations["observed_rates_cents"]
+                )
+            ):
+                raise ValueError(f"accepted aggregate review is invalid for {key!r}")
+        elif review_method == "two_pass_llm":
+            if not isinstance(classifier, dict) or not isinstance(verifier, dict):
+                raise ValueError(f"accepted mapping lacks two-pass evidence for {key!r}")
+            for label, decision in (("classifier", classifier), ("verifier", verifier)):
+                decision_confidence = decision.get("confidence")
+                decision_evidence = decision.get("evidence_clause_ids")
+                if (
+                    decision.get("normalized_description") != key
+                    or decision.get("selected_service") != service_name
+                    or decision.get("needs_review") is not False
+                    or isinstance(decision_confidence, bool)
+                    or not isinstance(decision_confidence, (int, float))
+                    or decision_confidence < MINIMUM_LLM_CONFIDENCE
+                    or not isinstance(decision_evidence, list)
+                    or not all(isinstance(item, str) for item in decision_evidence)
+                    or clause_id not in decision_evidence
+                ):
+                    raise ValueError(f"accepted {label} evidence is invalid for {key!r}")
+            expected_confidence = min(
+                float(classifier["confidence"]), float(verifier["confidence"])
+            )
+            if abs(float(confidence) - expected_confidence) > 1e-12:
+                raise ValueError(f"accepted mapping confidence is inconsistent for {key!r}")
+        else:
+            raise ValueError(f"accepted mapping review method is invalid for {key!r}")
         overrides[key] = ServiceMappingOverride(service_name, float(confidence))
     return overrides, payload
 
@@ -365,9 +392,11 @@ def prepare_hospital_2_mappings(
         if item.description not in examples[key] and len(examples[key]) < 3:
             examples[key].append(item.description)
 
+    existing_artifact: dict[str, Any] | None = None
     existing_entries: dict[str, dict[str, Any]] = {}
     if output_path.is_file():
         _, existing = load_hospital_2_mapping_artifact(output_path, contract)
+        existing_artifact = existing
         existing_entries = {
             entry["normalized_description"]: entry
             for entry in existing["mappings"]
@@ -435,6 +464,10 @@ def prepare_hospital_2_mappings(
                 contract,
             )
 
+    aggregate_review_count = sum(
+        entry.get("review_method") == "aggregate_rate_tiebreaker"
+        for entry in updated_entries.values()
+    )
     payload: dict[str, Any] = {
         "schema_version": MAPPING_SCHEMA_VERSION,
         "hospital": 2,
@@ -447,9 +480,15 @@ def prepare_hospital_2_mappings(
             "minimum_confidence": MINIMUM_LLM_CONFIDENCE,
             "requires_classifier_verifier_agreement": True,
             "candidate_limit": 5,
-            "billed_price_excluded": True,
+            "billed_price_excluded_from_llm": True,
+            "aggregate_rate_tiebreaker_count": aggregate_review_count,
+            "unknown_service_confidence_cap": 0.70,
         },
         "mappings": [updated_entries[key] for key in sorted(updated_entries)],
     }
+    if existing_artifact is not None:
+        for key in ("completion_review_prompt", "completion_review_prompt_sha256"):
+            if key in existing_artifact:
+                payload[key] = existing_artifact[key]
     write_json_atomic(output_path, payload)
     return payload

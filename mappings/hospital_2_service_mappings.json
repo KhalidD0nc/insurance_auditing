@@ -1,6 +1,8 @@
 {
   "contract_sha256": "c18ef5741215e525b211a141ea4bc66c6319e799d00f1a61d0b6c8a621c88db4",
-  "generated_at_utc": "2026-09-14T15:03:50.569463+00:00",
+  "completion_review_prompt": "prompts/009_hospital_2_completion_review.md",
+  "completion_review_prompt_sha256": "a9875f3640884146034a19970bc4a8b33d9cca6602110aadf55fe1bd103757a1",
+  "generated_at_utc": "2026-09-19T12:16:56Z",
   "hospital": 2,
   "mappings": [
     {
@@ -2626,37 +2628,28 @@
           "unit_basis": "per_night"
         }
       ],
-      "classifier": {
-        "confidence": 0.3,
-        "evidence_clause_ids": [
-          "28.1",
-          "26.3"
-        ],
-        "needs_review": true,
-        "normalized_description": "paediatric theatre time",
-        "reason": "Postoperative vs Emergency Paediatric Theatre Time tie at 0.75; description omits the distinguishing context.",
-        "selected_service": null
-      },
-      "confidence": 0.0,
-      "evidence_clause_ids": [],
-      "failure_reason": "conservative_gate_rejected",
+      "classifier": null,
+      "confidence": 0.9,
+      "evidence_clause_ids": [
+        "26.3"
+      ],
+      "failure_reason": null,
       "normalized_description": "paediatric theatre time",
       "raw_examples": [
         "PAED THEATRE TM /SA-1156"
       ],
-      "selected_service": null,
-      "status": "unresolved",
-      "verifier": {
-        "confidence": 0.3,
-        "evidence_clause_ids": [
-          "28.1",
-          "26.3"
+      "review_method": "aggregate_rate_tiebreaker",
+      "review_observations": {
+        "line_count": 22,
+        "observed_rates_cents": [
+          8500
         ],
-        "needs_review": true,
-        "normalized_description": "paediatric theatre time",
-        "reason": "Postoperative vs Emergency Paediatric Theatre Time tie at 0.75; description omits the distinguishing context.",
-        "selected_service": null
-      }
+        "unit_basis": "per_hour"
+      },
+      "review_reason": "All 22 occurrences use the Emergency Paediatric Theatre Time contract rate; no occurrence uses the postoperative rate.",
+      "selected_service": "Emergency Paediatric Theatre Time",
+      "status": "accepted",
+      "verifier": null
     },
     {
       "candidates": [
@@ -3857,15 +3850,27 @@
         }
       ],
       "classifier": null,
-      "confidence": 0.0,
-      "evidence_clause_ids": [],
-      "failure_reason": "OpenRouterError: model returned neither text content nor tool calls",
+      "confidence": 0.9,
+      "evidence_clause_ids": [
+        "14.2"
+      ],
+      "failure_reason": null,
       "normalized_description": "standard isolation room occupancy",
       "raw_examples": [
         "STD ISOL RM OCC"
       ],
-      "selected_service": null,
-      "status": "unresolved",
+      "review_method": "aggregate_rate_tiebreaker",
+      "review_observations": {
+        "line_count": 28,
+        "observed_rates_cents": [
+          27275,
+          33275
+        ],
+        "unit_basis": "per_day"
+      },
+      "review_reason": "All 28 occurrences use either the Standard Orthopaedic Isolation Room base rate or its documented bundle rate; none uses the neurological rate.",
+      "selected_service": "Standard Orthopaedic Isolation Room Occupancy",
+      "status": "accepted",
       "verifier": null
     },
     {
@@ -4444,10 +4449,12 @@
   ],
   "model": "z-ai/glm-5.3-flash",
   "policy": {
-    "billed_price_excluded": true,
+    "aggregate_rate_tiebreaker_count": 2,
+    "billed_price_excluded_from_llm": true,
     "candidate_limit": 5,
     "minimum_confidence": 0.9,
-    "requires_classifier_verifier_agreement": true
+    "requires_classifier_verifier_agreement": true,
+    "unknown_service_confidence_cap": 0.7
   },
   "prompt_sha256": "4236a2be049d3407ef165e644865226a4a7402ca12df121b93c0da06ae3ed2b6",
   "prompt_version": "hospital-2-service-mapping-v1",

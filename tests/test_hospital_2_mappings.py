@@ -181,8 +181,15 @@ class Hospital2MappingTests(unittest.TestCase):
     def test_versioned_live_mapping_artifact_passes_the_same_validator(self) -> None:
         path = ROOT / "mappings" / "hospital_2_service_mappings.json"
         overrides, artifact = load_hospital_2_mapping_artifact(path, self.contract)
-        self.assertEqual(len(overrides), 6)
+        self.assertEqual(len(overrides), 8)
         self.assertEqual(len(artifact["mappings"]), 87)
+        self.assertEqual(
+            sum(
+                entry.get("review_method") == "aggregate_rate_tiebreaker"
+                for entry in artifact["mappings"]
+            ),
+            2,
+        )
         serialized = path.read_text(encoding="utf-8")
         self.assertNotIn("OPENROUTER_API_KEY", serialized)
         self.assertNotIn("Bearer ", serialized)

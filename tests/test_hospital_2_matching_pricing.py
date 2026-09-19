@@ -75,6 +75,50 @@ class Hospital2MatchingAndPricingTests(unittest.TestCase):
         self.assertIsNone(match.service_name)
         self.assertEqual(match.margin, 0)
 
+    def test_conservative_matcher_accepts_an_unambiguous_abbreviation(self) -> None:
+        matcher = ServiceMatcher(
+            self.contract,
+            minimum_margin=0.15,
+            allow_price_tiebreaker=False,
+            allow_expanded_abbreviations=True,
+        )
+        match = matcher.match(
+            "ADV ENDOSC PROC",
+            "per_procedure",
+            1,
+        )
+        self.assertEqual(
+            match.service_name,
+            "Advanced Gastrointestinal Endoscopic Procedure",
+        )
+        self.assertEqual(match.source, "deterministic")
+
+    def test_unit_basis_breaks_only_a_true_semantic_tie(self) -> None:
+        matcher = ServiceMatcher(
+            self.contract,
+            minimum_margin=0.15,
+            allow_price_tiebreaker=False,
+            allow_unit_basis_tiebreaker=True,
+        )
+        match = matcher.match(
+            "PAED INF THER",
+            "per_unit_dispensed",
+            1,
+        )
+        self.assertEqual(
+            match.service_name,
+            "Intensive Paediatric Infusion Therapy",
+        )
+        self.assertEqual(match.source, "unit_basis_tiebreaker")
+        self.assertEqual(match.confidence, 0.90)
+
+        decoy = matcher.match(
+            "AMB OPHTH VENT SUPP",
+            "per_item",
+            18_050,
+        )
+        self.assertIsNone(decoy.service_name)
+
     def test_validated_mapping_override_records_provenance(self) -> None:
         description = "STD ISOL RM OCC"
         key = normalise_service_description(description)

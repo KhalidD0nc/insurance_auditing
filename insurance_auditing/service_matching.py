@@ -52,7 +52,11 @@ def normalise_service_description(value: str) -> str:
 
 
 def normalise_service_tokens(value: str) -> frozenset[str]:
-    return frozenset(normalise_service_description(value).split())
+    token_equivalents = {"pharm": "pharmaceutical", "plng": "planning"}
+    return frozenset(
+        token_equivalents.get(token, token)
+        for token in normalise_service_description(value).split()
+    )
 
 
 class ServiceMatcher:
@@ -63,10 +67,14 @@ class ServiceMatcher:
         *,
         minimum_margin: float = 0.0,
         allow_price_tiebreaker: bool = True,
+        allow_unit_basis_tiebreaker: bool = False,
+        allow_expanded_abbreviations: bool = False,
     ) -> None:
         self._contract = contract
         self._minimum_margin = minimum_margin
         self._allow_price_tiebreaker = allow_price_tiebreaker
+        self._allow_unit_basis_tiebreaker = allow_unit_basis_tiebreaker
+        self._allow_expanded_abbreviations = allow_expanded_abbreviations
         self._mappings = dict(mappings or {})
         unknown_services = {
             mapping.service_name for mapping in self._mappings.values()
@@ -107,10 +115,36 @@ class ServiceMatcher:
         ):
             return ServiceMatch(best_service, best_score, margin, key=mapping_key)
 
+        # When an abbreviated description is an equally good textual match for
+        # multiple services, the billed unit basis can identify the only
+        # contract-compatible candidate. Unlike price, the basis is used only
+        # for a genuine textual tie and only when every description token is
+        # present in the selected contract service.
+        tied = [service for score, service in ranked if best_score - score <= 0.01]
+        basis_matches = [
+            service
+            for service in tied
+            if self._contract.services[service].unit_basis == unit_basis
+            and description_tokens <= self._tokens[service]
+        ]
+        if (
+            self._allow_unit_basis_tiebreaker
+            and best_score >= 0.60
+            and len(tied) > 1
+            and len(basis_matches) == 1
+        ):
+            return ServiceMatch(
+                basis_matches[0],
+                best_score,
+                margin,
+                source="unit_basis_tiebreaker",
+                key=mapping_key,
+                confidence=0.90,
+            )
+
         # A billed rate is only used to break a textual tie. It never overrides a
         # clear description, which prevents a corrupted rate from changing identity.
         if self._allow_price_tiebreaker and margin >= self._minimum_margin:
-            tied = [service for score, service in ranked if best_score - score <= 0.01]
             price_matches = [
                 service for service in tied if unit_price_cents in self._plausible_rates[service]
             ]
@@ -119,14 +153,22 @@ class ServiceMatcher:
                     price_matches[0], best_score, margin, key=mapping_key
                 )
 
-        service_words = best_service.split()
-        identity_tokens = normalise_service_tokens(" ".join(service_words[:2]))
-        is_safe_abbreviation = (
-            description_tokens <= self._tokens[best_service]
-            and identity_tokens <= description_tokens
-            and best_score >= 0.60
-            and margin >= max(0.15, self._minimum_margin)
-        )
+        if self._allow_expanded_abbreviations:
+            is_safe_abbreviation = (
+                description_tokens <= self._tokens[best_service]
+                and len(description_tokens) >= 3
+                and best_score >= 0.60
+                and margin >= max(0.15, self._minimum_margin)
+            )
+        else:
+            service_words = best_service.split()
+            identity_tokens = normalise_service_tokens(" ".join(service_words[:2]))
+            is_safe_abbreviation = (
+                description_tokens <= self._tokens[best_service]
+                and identity_tokens <= description_tokens
+                and best_score >= 0.60
+                and margin >= max(0.15, self._minimum_margin)
+            )
         return ServiceMatch(
             best_service if is_safe_abbreviation else None,
             best_score,

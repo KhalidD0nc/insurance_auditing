@@ -66,6 +66,8 @@ class ContractAuditor:
             service_mappings,
             minimum_margin=0.15 if conservative_matching else 0.0,
             allow_price_tiebreaker=not conservative_matching,
+            allow_unit_basis_tiebreaker=conservative_matching,
+            allow_expanded_abbreviations=conservative_matching,
         )
         self._validate_pricing_pipeline()
 
