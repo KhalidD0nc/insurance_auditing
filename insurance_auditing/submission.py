@@ -73,7 +73,12 @@ def _submission_row(
 def build_hospital_2_submission_rows(
     result: DetailedAuditResult,
 ) -> list[dict[str, str]]:
-    """Build rows only for invoices whose service pricing is fully resolved."""
+    """Build one row for every Hospital 2 invoice identifier.
+
+    Unknown descriptions remain explicit findings. Their line totals preserve
+    the arithmetically calculated billed amount because the contract does not
+    provide a defensible replacement rate, and their confidence is reduced.
+    """
 
     rows = []
     for finding in sorted(
@@ -81,13 +86,16 @@ def build_hospital_2_submission_rows(
         key=lambda item: item.canonical_invoice_row,
     ):
         details = result.line_details.get(finding.invoice_id, ())
-        if not details or any(detail.matched_service is None for detail in details):
-            continue
+        maximum_confidence = (
+            Decimal("0.70")
+            if "unknown_service" in finding.categories
+            else Decimal("0.90")
+        )
         rows.append(
             _submission_row(
                 finding,
                 details,
-                maximum_confidence=Decimal("0.90"),
+                maximum_confidence=maximum_confidence,
             )
         )
     return rows

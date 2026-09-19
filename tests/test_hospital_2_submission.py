@@ -41,16 +41,10 @@ class Hospital2SubmissionTests(unittest.TestCase):
         cls.rows = build_hospital_2_submission_rows(cls.result)
         cls.by_invoice = {row["invoice_id"]: row for row in cls.rows}
 
-    def test_includes_only_pricing_complete_invoice_identifiers(self) -> None:
-        expected_ids = {
-            invoice_id
-            for invoice_id, details in self.result.line_details.items()
-            if details and all(detail.matched_service is not None for detail in details)
-        }
-
-        self.assertEqual(len(self.rows), 130)
-        self.assertEqual(set(self.by_invoice), expected_ids)
-        self.assertEqual(sum(row["flagged"] == "1" for row in self.rows), 15)
+    def test_includes_every_hospital_2_invoice_identifier(self) -> None:
+        self.assertEqual(len(self.rows), 1125)
+        self.assertEqual(set(self.by_invoice), set(self.result.findings))
+        self.assertEqual(sum(row["flagged"] == "1" for row in self.rows), 76)
         self.assertTrue(
             all(row["invoice_id"].startswith("INV-H2-") for row in self.rows)
         )
@@ -64,15 +58,21 @@ class Hospital2SubmissionTests(unittest.TestCase):
             all(0 < float(row["confidence"]) <= 0.90 for row in self.rows)
         )
 
-    def test_excludes_every_invoice_with_an_unresolved_service(self) -> None:
-        incomplete_ids = {
+    def test_includes_unknown_services_with_explicit_low_confidence(self) -> None:
+        unknown_ids = {
             invoice_id
             for invoice_id, details in self.result.line_details.items()
-            if not details or any(detail.matched_service is None for detail in details)
+            if any(detail.matched_service is None for detail in details)
         }
 
-        self.assertTrue(incomplete_ids)
-        self.assertTrue(set(self.by_invoice).isdisjoint(incomplete_ids))
+        self.assertEqual(len(unknown_ids), 13)
+        self.assertTrue(unknown_ids <= set(self.by_invoice))
+        for invoice_id in unknown_ids:
+            row = self.by_invoice[invoice_id]
+            self.assertEqual(row["flagged"], "1")
+            self.assertIn("unknown_service", row["error_category"])
+            self.assertLessEqual(float(row["confidence"]), 0.70)
+            self.assertTrue(row["expected_total_cents"])
 
     def test_caps_unlabelled_hospital_confidence(self) -> None:
         self.assertEqual(self.by_invoice["INV-H2-000002"]["confidence"], "0.90")
@@ -117,9 +117,9 @@ class Hospital2SubmissionTests(unittest.TestCase):
             self.assertEqual(tuple(written[0]), SUBMISSION_COLUMNS)
             self.assertEqual(written[0]["invoice_id"], "INV-H4-EXISTING")
             self.assertNotIn("INV-H2-STALE", {row["invoice_id"] for row in written})
-            self.assertEqual(len(written), 131)
+            self.assertEqual(len(written), 1126)
 
-    def test_submission_cli_is_offline_and_writes_only_complete_rows(self) -> None:
+    def test_submission_cli_is_offline_and_writes_complete_coverage(self) -> None:
         with TemporaryDirectory() as directory:
             output = Path(directory) / "submission.csv"
             argv = [
@@ -146,7 +146,8 @@ class Hospital2SubmissionTests(unittest.TestCase):
             with output.open(newline="", encoding="utf-8") as source:
                 written = list(csv.DictReader(source))
             self.assertEqual(written, self.rows)
-            self.assertIn('"skipped_incomplete": 995', stdout.getvalue())
+            self.assertIn('"rows": 1125', stdout.getvalue())
+            self.assertIn('"unknown_service_lines": 14', stdout.getvalue())
 
 
 if __name__ == "__main__":

@@ -94,7 +94,7 @@ def _parser() -> argparse.ArgumentParser:
     hospital_2.add_argument("--include-correct", action="store_true")
     hospital_2_submission = subparsers.add_parser(
         "generate-hospital-2-submission",
-        help="write pricing-complete Hospital 2 predictions to the submission CSV",
+        help="write complete Hospital 2 predictions to the submission CSV",
     )
     hospital_2_submission.add_argument("--data-root", type=Path, default=Path.cwd())
     hospital_2_submission.add_argument(
@@ -209,6 +209,11 @@ def main() -> None:
             conservative_matching=True,
         ).audit_detailed(dataset)
         rows = build_hospital_2_submission_rows(result)
+        unknown_service_lines = sum(
+            detail.matched_service is None
+            for details in result.line_details.values()
+            for detail in details
+        )
         write_submission_rows(
             args.output,
             rows,
@@ -221,7 +226,7 @@ def main() -> None:
                     "output": str(args.output.resolve()),
                     "rows": len(rows),
                     "flagged": sum(row["flagged"] == "1" for row in rows),
-                    "skipped_incomplete": len(result.findings) - len(rows),
+                    "unknown_service_lines": unknown_service_lines,
                 },
                 indent=2,
                 sort_keys=True,
