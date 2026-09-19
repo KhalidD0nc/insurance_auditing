@@ -42,6 +42,8 @@ class _LineContext:
     excluded: bool = False
     duplicate_category: str | None = None
     bundle_applies: bool = False
+    facility_multiplier: Decimal | None = None
+    plan_tier_multiplier: Decimal | None = None
     premium_multiplier: Decimal | None = None
     discount_multiplier: Decimal | None = None
     aggregate_daily_quantity: int | None = None
@@ -283,6 +285,28 @@ class ContractAuditor:
             assert context.base_rate_cents is not None
             steps.append(RateCalculationStep("bundle", rate, None, context.base_rate_cents))
             rate = context.base_rate_cents
+        if context.facility_multiplier is not None:
+            adjusted = _round_cents(rate, context.facility_multiplier)
+            steps.append(
+                RateCalculationStep(
+                    "facility",
+                    rate,
+                    str(context.facility_multiplier),
+                    adjusted,
+                )
+            )
+            rate = adjusted
+        if context.plan_tier_multiplier is not None:
+            adjusted = _round_cents(rate, context.plan_tier_multiplier)
+            steps.append(
+                RateCalculationStep(
+                    "plan_tier",
+                    rate,
+                    str(context.plan_tier_multiplier),
+                    adjusted,
+                )
+            )
+            rate = adjusted
         if context.premium_multiplier is not None:
             adjusted = _round_cents(rate, context.premium_multiplier)
             steps.append(
@@ -334,6 +358,8 @@ class ContractAuditor:
 
         stage_handlers = {
             PricingStage.BUNDLE: lambda: self._apply_bundles(grouped),
+            PricingStage.FACILITY: lambda: self._apply_facility_multipliers(priceable),
+            PricingStage.PLAN_TIER: lambda: self._apply_plan_tier_multipliers(priceable),
             PricingStage.PREMIUM: lambda: self._apply_premiums(grouped),
             PricingStage.DISCOUNT: lambda: self._apply_discounts(priceable),
             PricingStage.DAILY_CAP: lambda: self._apply_caps(grouped),
@@ -346,6 +372,10 @@ class ContractAuditor:
         for context in priceable:
             rate = context.base_rate_cents
             assert rate is not None
+            if context.facility_multiplier is not None:
+                rate = _round_cents(rate, context.facility_multiplier)
+            if context.plan_tier_multiplier is not None:
+                rate = _round_cents(rate, context.plan_tier_multiplier)
             if context.premium_multiplier is not None:
                 rate = _round_cents(rate, context.premium_multiplier)
             if context.discount_multiplier is not None:
@@ -388,6 +418,48 @@ class ContractAuditor:
                         context.bundle_partner_line_ids.update(
                             partner.item.line_id for partner in a
                         )
+
+    def _apply_facility_multipliers(
+        self,
+        contexts: list[_LineContext],
+    ) -> None:
+        for context in contexts:
+            multipliers = self.contract.facility_multipliers.get(
+                context.match.service_name,
+                {},
+            )
+            if multipliers:
+                try:
+                    context.facility_multiplier = multipliers[
+                        context.invoice.facility_code
+                    ]
+                except KeyError as exc:
+                    raise ValueError(
+                        "unsupported facility code for "
+                        f"{context.match.service_name}: "
+                        f"{context.invoice.facility_code!r}"
+                    ) from exc
+
+    def _apply_plan_tier_multipliers(
+        self,
+        contexts: list[_LineContext],
+    ) -> None:
+        for context in contexts:
+            multipliers = self.contract.plan_tier_multipliers.get(
+                context.match.service_name,
+                {},
+            )
+            if multipliers:
+                try:
+                    context.plan_tier_multiplier = multipliers[
+                        context.invoice.plan_tier
+                    ]
+                except KeyError as exc:
+                    raise ValueError(
+                        "unsupported plan tier for "
+                        f"{context.match.service_name}: "
+                        f"{context.invoice.plan_tier!r}"
+                    ) from exc
 
     def _apply_premiums(self, grouped: dict[tuple[str, date, str], list[_LineContext]]) -> None:
         for (_, service_date, service_name), group in grouped.items():
@@ -523,6 +595,8 @@ class ContractAuditor:
             billed
             == self._apply_adjustments(
                 alternate,
+                context.facility_multiplier,
+                context.plan_tier_multiplier,
                 context.premium_multiplier,
                 context.discount_multiplier,
             )
@@ -530,10 +604,83 @@ class ContractAuditor:
         ):
             return "contract_amendment_rate_mismatch"
         if context.bundle_applies and billed == self._apply_adjustments(
-            standalone, context.premium_multiplier, context.discount_multiplier
+            standalone,
+            context.facility_multiplier,
+            context.plan_tier_multiplier,
+            context.premium_multiplier,
+            context.discount_multiplier,
         ):
             return "bundle_not_applied"
-        if context.premium_multiplier is not None and billed == context.base_rate_cents:
+        if context.facility_multiplier is not None and billed == self._apply_adjustments(
+            context.base_rate_cents,
+            None,
+            context.plan_tier_multiplier,
+            context.premium_multiplier,
+            context.discount_multiplier,
+        ):
+            return "facility_multiplier_omitted"
+        if context.plan_tier_multiplier is not None and billed == self._apply_adjustments(
+            context.base_rate_cents,
+            context.facility_multiplier,
+            None,
+            context.premium_multiplier,
+            context.discount_multiplier,
+        ):
+            return "plan_tier_multiplier_omitted"
+        other_facility_multipliers = {
+            multiplier
+            for code, multiplier in self.contract.facility_multipliers.get(
+                context.match.service_name,
+                {},
+            ).items()
+            if code != context.invoice.facility_code
+        }
+        if any(
+            billed
+            == self._apply_adjustments(
+                context.base_rate_cents,
+                multiplier,
+                context.plan_tier_multiplier,
+                context.premium_multiplier,
+                context.discount_multiplier,
+            )
+            for multiplier in other_facility_multipliers
+        ):
+            return "facility_multiplier_mismatch"
+        other_tier_multipliers = {
+            multiplier
+            for tier, multiplier in self.contract.plan_tier_multipliers.get(
+                context.match.service_name,
+                {},
+            ).items()
+            if tier != context.invoice.plan_tier
+        }
+        if any(
+            billed
+            == self._apply_adjustments(
+                context.base_rate_cents,
+                context.facility_multiplier,
+                multiplier,
+                context.premium_multiplier,
+                context.discount_multiplier,
+            )
+            for multiplier in other_tier_multipliers
+        ):
+            return "plan_tier_multiplier_mismatch"
+        before_premium = self._apply_adjustments(
+            context.base_rate_cents,
+            context.facility_multiplier,
+            context.plan_tier_multiplier,
+            None,
+            None,
+        )
+        if context.premium_multiplier is not None and billed == self._apply_adjustments(
+            context.base_rate_cents,
+            context.facility_multiplier,
+            context.plan_tier_multiplier,
+            None,
+            context.discount_multiplier,
+        ):
             return "premium_omitted"
         if context.premium_multiplier is None:
             possible_premiums: set[Decimal] = set()
@@ -546,13 +693,17 @@ class ContractAuditor:
             if any(
                 billed
                 == self._apply_adjustments(
-                    context.base_rate_cents, multiplier, context.discount_multiplier
+                    context.base_rate_cents,
+                    context.facility_multiplier,
+                    context.plan_tier_multiplier,
+                    multiplier,
+                    context.discount_multiplier,
                 )
                 for multiplier in possible_premiums
             ):
                 return "premium_incorrectly_applied"
         if context.discount_multiplier is not None:
-            before_discount = context.base_rate_cents
+            before_discount = before_premium
             if context.premium_multiplier is not None:
                 before_discount = _round_cents(before_discount, context.premium_multiplier)
             if billed == before_discount:
@@ -562,6 +713,8 @@ class ContractAuditor:
                 billed
                 == self._apply_adjustments(
                     context.base_rate_cents,
+                    context.facility_multiplier,
+                    context.plan_tier_multiplier,
                     context.premium_multiplier,
                     rule.multiplier,
                 )
@@ -573,10 +726,16 @@ class ContractAuditor:
     @staticmethod
     def _apply_adjustments(
         base_rate_cents: int,
+        facility: Decimal | None,
+        plan_tier: Decimal | None,
         premium: Decimal | None,
         discount: Decimal | None,
     ) -> int:
         rate = base_rate_cents
+        if facility is not None:
+            rate = _round_cents(rate, facility)
+        if plan_tier is not None:
+            rate = _round_cents(rate, plan_tier)
         if premium is not None:
             rate = _round_cents(rate, premium)
         if discount is not None:

@@ -76,6 +76,30 @@ def _table_rows_after_heading(markdown: str, heading: str) -> list[list[str]]:
     return rows[1:]
 
 
+def _table_rows_until_heading(
+    markdown: str,
+    heading: str,
+    next_heading: str,
+) -> list[list[str]]:
+    try:
+        section = markdown.split(heading, 1)[1].split(next_heading, 1)[0]
+    except IndexError as exc:
+        raise ValueError(
+            f"table boundaries are missing: {heading!r} to {next_heading!r}"
+        ) from exc
+    rows: list[list[str]] = []
+    for line in section.splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if not cells or all(set(cell) <= {"-", ":"} for cell in cells):
+            continue
+        rows.append(cells)
+    if len(rows) < 2:
+        raise ValueError(f"section {heading!r} contains no Markdown table")
+    return rows[1:]
+
+
 def _money_to_cents(value: str) -> int:
     match = re.fullmatch(r"GBP\s+([\d,]+)\.(\d{2})", value)
     if not match:
@@ -862,4 +886,219 @@ def load_hospital_4_contract(path: Path | str) -> ContractRules:
         duplicate_billing_policy=(
             DuplicateBillingPolicy.REPEATED_SERVICE_PER_PATIENT_DAY
         ),
+    )
+
+
+def load_hospital_5_contract(path: Path | str) -> ContractRules:
+    """Parse Hospital 5's network, tier, and conditional reimbursement rules."""
+
+    contract_path = Path(path)
+    markdown = contract_path.read_text(encoding="utf-8")
+    identity = contract_for_hospital(5)
+    parsed_identity = (
+        _metadata_value(markdown, "Contract number"),
+        _contract_date(_metadata_value(markdown, "Effective from")),
+        _contract_date(_metadata_value(markdown, "Effective to")),
+    )
+    expected_identity = (
+        identity.contract_number,
+        identity.effective_from,
+        identity.effective_to,
+    )
+    if parsed_identity != expected_identity:
+        raise ValueError(
+            f"Hospital 5 contract identity mismatch: expected {expected_identity!r}, "
+            f"found {parsed_identity!r}"
+        )
+    if _metadata_value(markdown, "Currency") != "GBP":
+        raise ValueError("Hospital 5 uses an unsupported currency")
+    if _metadata_value(markdown, "Rounding convention") != "half_up_cent":
+        raise ValueError("Hospital 5 uses an unsupported rounding convention")
+
+    calculation = _section_text(markdown, 3)
+    order_markers = (
+        "substitution of a bundled rate",
+        "the facility multiplier",
+        "the plan-tier multiplier",
+        "any premium or uplift",
+        "any cumulative volume discount",
+    )
+    positions = [calculation.find(marker) for marker in order_markers]
+    if any(position < 0 for position in positions) or positions != sorted(positions):
+        raise ValueError("Hospital 5 adjustment order is missing or unsupported")
+    if "Rounding is applied after each individual step" not in calculation:
+        raise ValueError("Hospital 5 per-step rounding rule is missing or unsupported")
+
+    service_rows = _table_rows_until_heading(
+        markdown,
+        "## 4. Table 1 — Base Rates",
+        "### Table 2 — Facility Multipliers",
+    )
+    if len(service_rows) != 84:
+        raise ValueError(
+            f"Hospital 5 must contain 84 base-rate rows, found {len(service_rows)}"
+        )
+    services: dict[str, ServiceRule] = {}
+    for service, basis, rate, cap in service_rows:
+        if service in services:
+            raise ValueError(f"duplicate Hospital 5 base-rate service: {service}")
+        if basis not in _UNIT_BASIS:
+            raise ValueError(f"unknown Hospital 5 unit basis for {service}: {basis!r}")
+        services[service] = ServiceRule(
+            name=service,
+            unit_basis=_UNIT_BASIS[basis],
+            rate_cents=_money_to_cents(rate),
+            daily_cap=None if cap == "—" else _quantity(cap),
+            clause_id="4",
+        )
+    if sum(rule.daily_cap is not None for rule in services.values()) != 9:
+        raise ValueError("Hospital 5 must contain 9 daily caps")
+
+    facility_rows = _table_rows_until_heading(
+        markdown,
+        "### Table 2 — Facility Multipliers",
+        "### Table 3 — Plan-Tier Multipliers",
+    )
+    if len(facility_rows) != 84:
+        raise ValueError("Hospital 5 must contain 84 facility-multiplier rows")
+    facility_multipliers: dict[str, dict[str, Decimal]] = {}
+    for service, main, north, coast in facility_rows:
+        if service in facility_multipliers:
+            raise ValueError(f"duplicate Hospital 5 facility row: {service}")
+        facility_multipliers[service] = {
+            "F-MAIN": Decimal(main),
+            "F-NORTH": Decimal(north),
+            "F-COAST": Decimal(coast),
+        }
+
+    tier_rows = _table_rows_until_heading(
+        markdown,
+        "### Table 3 — Plan-Tier Multipliers",
+        "## 5. Threshold Premiums",
+    )
+    if len(tier_rows) != 84:
+        raise ValueError("Hospital 5 must contain 84 plan-tier-multiplier rows")
+    plan_tier_multipliers: dict[str, dict[str, Decimal]] = {}
+    for service, bronze, silver, gold in tier_rows:
+        if service in plan_tier_multipliers:
+            raise ValueError(f"duplicate Hospital 5 plan-tier row: {service}")
+        plan_tier_multipliers[service] = {
+            "BRONZE": Decimal(bronze),
+            "SILVER": Decimal(silver),
+            "GOLD": Decimal(gold),
+        }
+    if set(facility_multipliers) != set(services):
+        raise ValueError("Hospital 5 facility table does not match the base-rate table")
+    if set(plan_tier_multipliers) != set(services):
+        raise ValueError("Hospital 5 plan-tier table does not match the base-rate table")
+
+    premium_rows = _table_rows(markdown, 5)
+    if len(premium_rows) != 10:
+        raise ValueError("Hospital 5 must contain 10 threshold premiums")
+    premiums: dict[str, ThresholdPremium] = {}
+    for service, threshold, uplift in premium_rows:
+        if service in premiums:
+            raise ValueError(f"duplicate Hospital 5 threshold premium: {service}")
+        premiums[service] = ThresholdPremium(
+            service,
+            _quantity(threshold),
+            _uplift_multiplier(uplift),
+            "5",
+        )
+
+    weekend_rows = _table_rows(markdown, 6)
+    if len(weekend_rows) != 9:
+        raise ValueError("Hospital 5 must contain 9 non-business-day uplifts")
+    weekend_uplifts: dict[str, Decimal] = {}
+    for service, uplift in weekend_rows:
+        if service in weekend_uplifts:
+            raise ValueError(f"duplicate Hospital 5 weekend uplift: {service}")
+        weekend_uplifts[service] = _uplift_multiplier(uplift)
+    if set(premiums) & set(weekend_uplifts):
+        raise ValueError("Hospital 5 premium and weekend uplift services overlap")
+
+    bundle_rows = _table_rows(markdown, 7)
+    if len(bundle_rows) != 3:
+        raise ValueError("Hospital 5 must contain 3 bundle pairs")
+    bundles_list: list[BundleRule] = []
+    bundled_services: set[str] = set()
+    for service_a, rate_a, service_b, rate_b in bundle_rows:
+        repeated = {service_a, service_b} & bundled_services
+        if repeated:
+            raise ValueError(
+                "Hospital 5 service appears in more than one bundle: "
+                f"{sorted(repeated)}"
+            )
+        bundled_services.update((service_a, service_b))
+        bundles_list.append(
+            BundleRule(
+                service_a,
+                service_b,
+                _money_to_cents(rate_a),
+                _money_to_cents(rate_b),
+                ("7",),
+            )
+        )
+    bundles = tuple(bundles_list)
+
+    discount_rows = _table_rows(markdown, 8)
+    if len(discount_rows) != 15:
+        raise ValueError("Hospital 5 must contain 15 volume-discount thresholds")
+    discounts: dict[str, list[VolumeDiscount]] = defaultdict(list)
+    seen_discount_thresholds: set[tuple[str, int]] = set()
+    for service, threshold, discount in discount_rows:
+        parsed_threshold = _quantity(threshold)
+        key = (service, parsed_threshold)
+        if key in seen_discount_thresholds:
+            raise ValueError(f"duplicate Hospital 5 volume discount: {key!r}")
+        seen_discount_thresholds.add(key)
+        discounts[service].append(
+            VolumeDiscount(
+                service,
+                parsed_threshold,
+                _discount_multiplier(discount),
+                "8",
+            )
+        )
+    immutable_discounts = {
+        service: tuple(sorted(rules, key=lambda rule: rule.threshold))
+        for service, rules in discounts.items()
+    }
+
+    exclusion_rows = _table_rows(markdown, 9)
+    if len(exclusion_rows) != 7:
+        raise ValueError("Hospital 5 must contain 7 exclusion windows")
+    exclusions_list: list[ExclusionRule] = []
+    seen_exclusions: set[tuple[str, int, str]] = set()
+    for excluded, window, trigger in exclusion_rows:
+        key = (excluded, _quantity(window), trigger)
+        if key in seen_exclusions:
+            raise ValueError(f"duplicate Hospital 5 exclusion rule: {key!r}")
+        seen_exclusions.add(key)
+        exclusions_list.append(ExclusionRule(*key, "9"))
+    exclusions = tuple(exclusions_list)
+
+    _validate_rule_references(
+        services,
+        premiums,
+        weekend_uplifts,
+        immutable_discounts,
+        bundles,
+        exclusions,
+    )
+    return ContractRules(
+        identity=identity,
+        services=services,
+        threshold_premiums=premiums,
+        non_business_day_uplifts=weekend_uplifts,
+        volume_discounts=immutable_discounts,
+        bundles=bundles,
+        exclusions=exclusions,
+        facility_multipliers=facility_multipliers,
+        plan_tier_multipliers=plan_tier_multipliers,
+        pricing_pipeline=DEFAULT_PRICING_PIPELINE,
+        duplicate_billing_policy=(
+            DuplicateBillingPolicy.REPEATED_SERVICE_PER_PATIENT_DAY
+        ),
+        source_sha256=hashlib.sha256(markdown.encode("utf-8")).hexdigest(),
     )

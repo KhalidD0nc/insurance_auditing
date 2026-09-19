@@ -3,7 +3,7 @@ from pathlib import Path
 import unittest
 
 from insurance_auditing.contract_parser import load_hospital_1_contract
-from insurance_auditing.models import DEFAULT_PRICING_PIPELINE
+from insurance_auditing.models import DEFAULT_PRICING_PIPELINE, PricingStage
 from insurance_auditing.pricing import ContractAuditor
 from insurance_auditing.service_matching import ServiceMatcher
 
@@ -47,13 +47,19 @@ class Hospital1ContractTests(unittest.TestCase):
             replace(self.contract, pricing_pipeline=reversed_pipeline)
         )
         calls = []
-        auditor._apply_bundles = lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[0])
-        auditor._apply_premiums = lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[1])
-        auditor._apply_discounts = lambda contexts: calls.append(DEFAULT_PRICING_PIPELINE[2])
-        auditor._apply_caps = lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[3])
-        auditor._apply_exclusions = lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[4])
+        auditor._apply_bundles = lambda grouped: calls.append(PricingStage.BUNDLE)
+        auditor._apply_facility_multipliers = (
+            lambda contexts: calls.append(PricingStage.FACILITY)
+        )
+        auditor._apply_plan_tier_multipliers = (
+            lambda contexts: calls.append(PricingStage.PLAN_TIER)
+        )
+        auditor._apply_premiums = lambda grouped: calls.append(PricingStage.PREMIUM)
+        auditor._apply_discounts = lambda contexts: calls.append(PricingStage.DISCOUNT)
+        auditor._apply_caps = lambda grouped: calls.append(PricingStage.DAILY_CAP)
+        auditor._apply_exclusions = lambda grouped: calls.append(PricingStage.EXCLUSION)
         auditor._apply_duplicates = (
-            lambda grouped: calls.append(DEFAULT_PRICING_PIPELINE[5])
+            lambda grouped: calls.append(PricingStage.DUPLICATE)
         )
 
         auditor._prepare_pricing([])

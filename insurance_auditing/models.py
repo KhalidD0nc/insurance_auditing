@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
 from enum import Enum
@@ -175,6 +175,8 @@ class ExclusionRule:
 
 class PricingStage(str, Enum):
     BUNDLE = "bundle"
+    FACILITY = "facility"
+    PLAN_TIER = "plan_tier"
     PREMIUM = "premium"
     DISCOUNT = "discount"
     DAILY_CAP = "daily_cap"
@@ -189,6 +191,8 @@ class DuplicateBillingPolicy(str, Enum):
 
 DEFAULT_PRICING_PIPELINE = (
     PricingStage.BUNDLE,
+    PricingStage.FACILITY,
+    PricingStage.PLAN_TIER,
     PricingStage.PREMIUM,
     PricingStage.DISCOUNT,
     PricingStage.DAILY_CAP,
@@ -206,6 +210,12 @@ class ContractRules:
     volume_discounts: dict[str, tuple[VolumeDiscount, ...]]
     bundles: tuple[BundleRule, ...]
     exclusions: tuple[ExclusionRule, ...]
+    facility_multipliers: dict[str, dict[str, Decimal]] = field(
+        default_factory=dict
+    )
+    plan_tier_multipliers: dict[str, dict[str, Decimal]] = field(
+        default_factory=dict
+    )
     pricing_pipeline: tuple[PricingStage, ...] = DEFAULT_PRICING_PIPELINE
     duplicate_billing_policy: DuplicateBillingPolicy = (
         DuplicateBillingPolicy.MATCHING_LINE_ACROSS_INVOICES

@@ -205,6 +205,15 @@ class ServiceMatcher:
             if bundle.service_b == service_name:
                 base_rates.add(bundle.rate_b_cents)
 
+        facilities = {Decimal("1")}
+        facilities.update(
+            self._contract.facility_multipliers.get(service_name, {}).values()
+        )
+        plan_tiers = {Decimal("1")}
+        plan_tiers.update(
+            self._contract.plan_tier_multipliers.get(service_name, {}).values()
+        )
+
         premiums = {Decimal("1")}
         threshold = self._contract.threshold_premiums.get(service_name)
         if threshold:
@@ -219,16 +228,30 @@ class ServiceMatcher:
         )
         rates = set()
         for base_rate in base_rates:
-            for premium in premiums:
-                after_premium = int(
-                    (Decimal(base_rate) * premium).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+            for facility in facilities:
+                after_facility = int(
+                    (Decimal(base_rate) * facility).quantize(
+                        Decimal("1"), rounding=ROUND_HALF_UP
+                    )
                 )
-                for discount in discounts:
-                    rates.add(
-                        int(
-                            (Decimal(after_premium) * discount).quantize(
+                for plan_tier in plan_tiers:
+                    after_plan_tier = int(
+                        (Decimal(after_facility) * plan_tier).quantize(
+                            Decimal("1"), rounding=ROUND_HALF_UP
+                        )
+                    )
+                    for premium in premiums:
+                        after_premium = int(
+                            (Decimal(after_plan_tier) * premium).quantize(
                                 Decimal("1"), rounding=ROUND_HALF_UP
                             )
                         )
-                    )
+                        for discount in discounts:
+                            rates.add(
+                                int(
+                                    (Decimal(after_premium) * discount).quantize(
+                                        Decimal("1"), rounding=ROUND_HALF_UP
+                                    )
+                                )
+                            )
         return frozenset(rates)
