@@ -123,12 +123,21 @@ class ContractIdentity:
 
 
 @dataclass(frozen=True, slots=True)
+class ScheduledRate:
+    effective_from: date
+    rate_cents: int
+    clause_id: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class ServiceRule:
     name: str
     unit_basis: str
     rate_cents: int
     daily_cap: int | None = None
     clause_id: str | None = None
+    effective_from: date | None = None
+    scheduled_rates: tuple[ScheduledRate, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

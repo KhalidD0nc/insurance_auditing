@@ -20,6 +20,7 @@ from .models import (
     RateCalculationStep,
     ServiceMatch,
     ServiceMappingOverride,
+    ServiceRule,
 )
 from .service_matching import ServiceMatcher
 
@@ -34,6 +35,8 @@ class _LineContext:
     invoice: InvoiceRecord
     match: ServiceMatch
     base_rate_cents: int | None = None
+    standalone_rate_cents: int | None = None
+    rate_clause_id: str | None = None
     expected_rate_cents: int | None = None
     expected_quantity: int | None = None
     excluded: bool = False
@@ -50,6 +53,7 @@ class _LineContext:
     daily_cap_related_line_ids: set[str] = field(default_factory=set)
     duplicate_of_line_id: str | None = None
     include_in_output: bool = True
+    service_not_effective: bool = False
 
 
 class ContractAuditor:
@@ -169,6 +173,8 @@ class ContractAuditor:
             premium_threshold = premium.threshold if premium else None
             if item.unit_basis_as_billed != service.unit_basis:
                 categories.add("wrong_unit_basis")
+            if context.service_not_effective:
+                categories.add("service_not_contracted_on_date")
             if context.duplicate_category is not None:
                 categories.add(context.duplicate_category)
             if context.excluded:
@@ -184,10 +190,17 @@ class ContractAuditor:
             expected_quantity = context.expected_quantity or 0
             expected_line_total = (
                 0
-                if context.excluded or context.duplicate_category
+                if (
+                    context.excluded
+                    or context.duplicate_category
+                    or context.service_not_effective
+                )
                 else expected_rate * expected_quantity
             )
-            if item.unit_price_cents != expected_rate:
+            if (
+                not context.service_not_effective
+                and item.unit_price_cents != expected_rate
+            ):
                 categories.add(self._price_error_category(context))
             rate_steps = self._rate_calculation(context)
 
@@ -229,7 +242,7 @@ class ContractAuditor:
             match_key=context.match.key,
             match_confidence=context.match.confidence,
             contract_clause_id=(
-                self.contract.services[service_name].clause_id
+                context.rate_clause_id
                 if service_name is not None
                 else None
             ),
@@ -261,8 +274,10 @@ class ContractAuditor:
         context: _LineContext,
     ) -> tuple[RateCalculationStep, ...]:
         assert context.match.service_name is not None
-        service = self.contract.services[context.match.service_name]
-        rate = service.rate_cents
+        if context.service_not_effective:
+            return (RateCalculationStep("not_contracted", None, None, 0),)
+        assert context.standalone_rate_cents is not None
+        rate = context.standalone_rate_cents
         steps = [RateCalculationStep("base", None, None, rate)]
         if context.bundle_applies:
             assert context.base_rate_cents is not None
@@ -295,11 +310,24 @@ class ContractAuditor:
         valid = [context for context in contexts if context.match.service_name is not None]
         for context in valid:
             service = self.contract.services[context.match.service_name]
-            context.base_rate_cents = service.rate_cents
             context.expected_quantity = context.item.quantity
+            service_date = _parse_date(context.item.service_date)
+            standalone_rate, rate_clause_id = self._standalone_rate(
+                service, service_date
+            )
+            context.rate_clause_id = rate_clause_id
+            if standalone_rate is None:
+                context.service_not_effective = True
+                context.base_rate_cents = 0
+                context.standalone_rate_cents = 0
+                context.expected_rate_cents = 0
+                continue
+            context.base_rate_cents = standalone_rate
+            context.standalone_rate_cents = standalone_rate
 
         grouped: dict[tuple[str, date, str], list[_LineContext]] = defaultdict(list)
-        for context in valid:
+        priceable = [context for context in valid if not context.service_not_effective]
+        for context in priceable:
             service_date = _parse_date(context.item.service_date)
             if service_date is not None:
                 grouped[(context.invoice.patient_id, service_date, context.match.service_name)].append(context)
@@ -307,7 +335,7 @@ class ContractAuditor:
         stage_handlers = {
             PricingStage.BUNDLE: lambda: self._apply_bundles(grouped),
             PricingStage.PREMIUM: lambda: self._apply_premiums(grouped),
-            PricingStage.DISCOUNT: lambda: self._apply_discounts(valid),
+            PricingStage.DISCOUNT: lambda: self._apply_discounts(priceable),
             PricingStage.DAILY_CAP: lambda: self._apply_caps(grouped),
             PricingStage.EXCLUSION: lambda: self._apply_exclusions(grouped),
             PricingStage.DUPLICATE: lambda: self._apply_duplicates(grouped),
@@ -315,7 +343,7 @@ class ContractAuditor:
         for stage in self.contract.pricing_pipeline:
             stage_handlers[stage]()
 
-        for context in valid:
+        for context in priceable:
             rate = context.base_rate_cents
             assert rate is not None
             if context.premium_multiplier is not None:
@@ -323,6 +351,23 @@ class ContractAuditor:
             if context.discount_multiplier is not None:
                 rate = _round_cents(rate, context.discount_multiplier)
             context.expected_rate_cents = rate
+
+    @staticmethod
+    def _standalone_rate(
+        service: ServiceRule,
+        service_date: date | None,
+    ) -> tuple[int | None, str | None]:
+        if service.effective_from is not None:
+            if service_date is not None and service_date < service.effective_from:
+                return None, service.clause_id
+        rate = service.rate_cents
+        clause_id = service.clause_id
+        if service_date is not None:
+            for scheduled in service.scheduled_rates:
+                if service_date >= scheduled.effective_from:
+                    rate = scheduled.rate_cents
+                    clause_id = scheduled.clause_id
+        return rate, clause_id
 
     def _apply_bundles(self, grouped: dict[tuple[str, date, str], list[_LineContext]]) -> None:
         for bundle in self.contract.bundles:
@@ -467,7 +512,23 @@ class ContractAuditor:
         assert context.base_rate_cents is not None
         assert context.match.service_name is not None
         billed = context.item.unit_price_cents
-        standalone = self.contract.services[context.match.service_name].rate_cents
+        assert context.standalone_rate_cents is not None
+        standalone = context.standalone_rate_cents
+        service = self.contract.services[context.match.service_name]
+        alternate_scheduled_rates = {
+            service.rate_cents,
+            *(scheduled.rate_cents for scheduled in service.scheduled_rates),
+        } - {standalone}
+        if any(
+            billed
+            == self._apply_adjustments(
+                alternate,
+                context.premium_multiplier,
+                context.discount_multiplier,
+            )
+            for alternate in alternate_scheduled_rates
+        ):
+            return "contract_amendment_rate_mismatch"
         if context.bundle_applies and billed == self._apply_adjustments(
             standalone, context.premium_multiplier, context.discount_multiplier
         ):

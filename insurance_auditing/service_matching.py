@@ -196,7 +196,9 @@ class ServiceMatcher:
         return ranked[:limit]
 
     def _rates_for_service(self, service_name: str) -> frozenset[int]:
-        base_rates = {self._contract.services[service_name].rate_cents}
+        service = self._contract.services[service_name]
+        base_rates = {service.rate_cents}
+        base_rates.update(rate.rate_cents for rate in service.scheduled_rates)
         for bundle in self._contract.bundles:
             if bundle.service_a == service_name:
                 base_rates.add(bundle.rate_a_cents)

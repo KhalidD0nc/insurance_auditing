@@ -15,6 +15,7 @@ from .models import (
     DEFAULT_PRICING_PIPELINE,
     DuplicateBillingPolicy,
     ExclusionRule,
+    ScheduledRate,
     ServiceRule,
     ThresholdPremium,
     VolumeDiscount,
@@ -52,6 +53,26 @@ def _table_rows(markdown: str, section_number: int) -> list[list[str]]:
         rows.append(cells)
     if not rows:
         raise ValueError(f"section {section_number} contains no Markdown table")
+    return rows[1:]
+
+
+def _table_rows_after_heading(markdown: str, heading: str) -> list[list[str]]:
+    in_section = False
+    rows: list[list[str]] = []
+    for line in markdown.splitlines():
+        if line == heading:
+            in_section = True
+            continue
+        if in_section and line.startswith("## "):
+            break
+        if not in_section or not line.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if not cells or all(set(cell) <= {"-", ":"} for cell in cells):
+            continue
+        rows.append(cells)
+    if not rows:
+        raise ValueError(f"section {heading!r} contains no Markdown table")
     return rows[1:]
 
 
@@ -404,6 +425,222 @@ def load_hospital_2_contract(path: Path | str) -> ContractRules:
         pricing_pipeline=DEFAULT_PRICING_PIPELINE,
         duplicate_billing_policy=DuplicateBillingPolicy.MATCHING_LINE_ACROSS_INVOICES,
         source_sha256=hashlib.sha256(markdown.encode("utf-8")).hexdigest(),
+    )
+
+
+def load_hospital_3_contract(path: Path | str) -> ContractRules:
+    """Merge Hospital 3's base agreement, rate appendix, and 2025 amendment."""
+
+    contract_directory = Path(path)
+    base = (contract_directory / "base_agreement.md").read_text(encoding="utf-8")
+    appendix = (contract_directory / "appendix_b_rate_schedule.md").read_text(
+        encoding="utf-8"
+    )
+    amendment = (contract_directory / "amendment_no_1.md").read_text(
+        encoding="utf-8"
+    )
+    identity = contract_for_hospital(3)
+    expected_identity = (
+        identity.contract_number,
+        identity.effective_from,
+        identity.effective_to,
+    )
+    for name, markdown in (
+        ("base agreement", base),
+        ("Appendix B", appendix),
+        ("Amendment No. 1", amendment),
+    ):
+        parsed_identity = (
+            _metadata_value(markdown, "Contract number"),
+            _contract_date(_metadata_value(markdown, "Effective from")),
+            _contract_date(_metadata_value(markdown, "Effective to")),
+        )
+        if parsed_identity != expected_identity:
+            raise ValueError(
+                f"Hospital 3 {name} identity mismatch: expected "
+                f"{expected_identity!r}, found {parsed_identity!r}"
+            )
+        if _metadata_value(markdown, "Currency") != "GBP":
+            raise ValueError(f"Hospital 3 {name} uses an unsupported currency")
+        if _metadata_value(markdown, "Rounding convention") != "half_up_cent":
+            raise ValueError(
+                f"Hospital 3 {name} uses an unsupported rounding convention"
+            )
+
+    scope = _section_text(base, 1)
+    if "Main Campus (F-MAIN)" not in scope or "No facility differential" not in scope:
+        raise ValueError("Hospital 3 facility scope is missing or unsupported")
+    if "all plan tiers are reimbursed identically" not in scope:
+        raise ValueError("Hospital 3 plan-tier scope is missing or unsupported")
+
+    conventions = _section_text(base, 3)
+    order_markers = (
+        "substitution of a bundled rate",
+        "the facility multiplier",
+        "the plan-tier multiplier",
+        "any premium or uplift",
+        "any cumulative volume discount",
+    )
+    positions = [conventions.find(marker) for marker in order_markers]
+    if any(position < 0 for position in positions) or positions != sorted(positions):
+        raise ValueError("Hospital 3 adjustment order is missing or unsupported")
+    if "Rounding is applied after each individual step" not in conventions:
+        raise ValueError("Hospital 3 per-step rounding rule is missing or unsupported")
+
+    rate_rows = _table_rows_after_heading(appendix, "## B.1 Rates")
+    if len(rate_rows) != 118:
+        raise ValueError(
+            f"Hospital 3 Appendix B must contain 118 services, found {len(rate_rows)}"
+        )
+    services: dict[str, ServiceRule] = {}
+    for service, basis, rate, cap in rate_rows:
+        if service in services:
+            raise ValueError(f"duplicate Hospital 3 service: {service}")
+        if basis not in _UNIT_BASIS:
+            raise ValueError(f"unknown Hospital 3 unit basis for {service}: {basis!r}")
+        services[service] = ServiceRule(
+            name=service,
+            unit_basis=_UNIT_BASIS[basis],
+            rate_cents=_money_to_cents(rate),
+            daily_cap=None if cap == "—" else _quantity(cap),
+            clause_id="B.1",
+        )
+
+    amendment_date = _contract_date("1 January 2025")
+    if "takes effect on 1 January 2025" not in amendment:
+        raise ValueError("Hospital 3 amendment effective date is missing")
+    if "applies **by Service Date**" not in amendment:
+        raise ValueError("Hospital 3 amendment must apply by Service Date")
+
+    substituted_rows = _table_rows_after_heading(
+        amendment, "## A1.2 Substituted Rates"
+    )
+    if len(substituted_rows) != 7:
+        raise ValueError("Hospital 3 amendment must contain 7 substituted rates")
+    for service, basis, old_rate, new_rate in substituted_rows:
+        if service not in services:
+            raise ValueError(f"Hospital 3 amendment references unknown service: {service}")
+        existing = services[service]
+        if _UNIT_BASIS.get(basis) != existing.unit_basis:
+            raise ValueError(f"Hospital 3 amendment basis mismatch for {service}")
+        if _money_to_cents(old_rate) != existing.rate_cents:
+            raise ValueError(f"Hospital 3 amendment prior rate mismatch for {service}")
+        services[service] = replace(
+            existing,
+            scheduled_rates=(
+                ScheduledRate(amendment_date, _money_to_cents(new_rate), "A1.2"),
+            ),
+        )
+
+    additional_rows = _table_rows_after_heading(
+        amendment, "## A1.3 Additional Services"
+    )
+    if len(additional_rows) != 2:
+        raise ValueError("Hospital 3 amendment must contain 2 additional services")
+    for service, basis, rate in additional_rows:
+        if service in services:
+            raise ValueError(f"duplicate Hospital 3 amended service: {service}")
+        if basis not in _UNIT_BASIS:
+            raise ValueError(f"unknown Hospital 3 unit basis for {service}: {basis!r}")
+        services[service] = ServiceRule(
+            name=service,
+            unit_basis=_UNIT_BASIS[basis],
+            rate_cents=_money_to_cents(rate),
+            clause_id="A1.3",
+            effective_from=amendment_date,
+        )
+
+    premium_rows = _table_rows(base, 4)
+    if len(premium_rows) != 14:
+        raise ValueError("Hospital 3 must contain 14 threshold premiums")
+    premiums = {
+        service: ThresholdPremium(
+            service,
+            _quantity(threshold),
+            _uplift_multiplier(uplift),
+            "4",
+        )
+        for service, threshold, uplift in premium_rows
+    }
+
+    weekend_rows = _table_rows(base, 5)
+    if len(weekend_rows) != 12:
+        raise ValueError("Hospital 3 must contain 12 weekend uplifts")
+    weekend_uplifts = {
+        service: _uplift_multiplier(uplift)
+        for service, uplift in weekend_rows
+    }
+
+    discount_rows = _table_rows(base, 6)
+    if len(discount_rows) != 19:
+        raise ValueError("Hospital 3 must contain 19 volume-discount thresholds")
+    discounts: dict[str, list[VolumeDiscount]] = defaultdict(list)
+    for service, threshold, discount in discount_rows:
+        discounts[service].append(
+            VolumeDiscount(
+                service,
+                _quantity(threshold),
+                _discount_multiplier(discount),
+                "6",
+            )
+        )
+    immutable_discounts = {
+        service: tuple(sorted(rules, key=lambda rule: rule.threshold))
+        for service, rules in discounts.items()
+    }
+
+    cap_rows = _table_rows(base, 7)
+    if len(cap_rows) != 12:
+        raise ValueError("Hospital 3 must contain 12 daily caps")
+    for service, cap in cap_rows:
+        if service not in services:
+            raise ValueError(f"Hospital 3 cap references unknown service: {service}")
+        parsed_cap = _quantity(cap)
+        if services[service].daily_cap != parsed_cap:
+            raise ValueError(f"Hospital 3 cap mismatch for {service}")
+
+    bundle_rows = _table_rows(base, 8)
+    if len(bundle_rows) != 5:
+        raise ValueError("Hospital 3 must contain 5 bundle pairs")
+    bundles = tuple(
+        BundleRule(
+            service_a,
+            service_b,
+            _money_to_cents(rate_a),
+            _money_to_cents(rate_b),
+            ("8",),
+        )
+        for service_a, service_b, rate_a, rate_b in bundle_rows
+    )
+
+    exclusion_rows = _table_rows(base, 9)
+    if len(exclusion_rows) != 10:
+        raise ValueError("Hospital 3 must contain 10 exclusion windows")
+    exclusions = tuple(
+        ExclusionRule(excluded, _quantity(window), trigger, "9")
+        for excluded, window, trigger in exclusion_rows
+    )
+
+    _validate_rule_references(
+        services,
+        premiums,
+        weekend_uplifts,
+        immutable_discounts,
+        bundles,
+        exclusions,
+    )
+    source = "\n".join((base, appendix, amendment))
+    return ContractRules(
+        identity=identity,
+        services=services,
+        threshold_premiums=premiums,
+        non_business_day_uplifts=weekend_uplifts,
+        volume_discounts=immutable_discounts,
+        bundles=bundles,
+        exclusions=exclusions,
+        pricing_pipeline=DEFAULT_PRICING_PIPELINE,
+        duplicate_billing_policy=DuplicateBillingPolicy.REPEATED_SERVICE_PER_PATIENT_DAY,
+        source_sha256=hashlib.sha256(source.encode("utf-8")).hexdigest(),
     )
 
 
