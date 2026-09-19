@@ -192,6 +192,12 @@ def write_submission_rows(
                 if not row["invoice_id"].startswith(replace_invoice_prefix):
                     preserved_rows.append(row)
 
+    combined_rows = preserved_rows + rows
+    invoice_ids = [row["invoice_id"] for row in combined_rows]
+    if len(invoice_ids) != len(set(invoice_ids)):
+        raise ValueError("submission rows must contain unique invoice identifiers")
+    combined_rows.sort(key=lambda row: row["invoice_id"])
+
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary_path: Path | None = None
     try:
@@ -207,8 +213,7 @@ def write_submission_rows(
             temporary_path = Path(temporary.name)
             writer = csv.DictWriter(temporary, fieldnames=SUBMISSION_COLUMNS)
             writer.writeheader()
-            writer.writerows(preserved_rows)
-            writer.writerows(rows)
+            writer.writerows(combined_rows)
         os.replace(temporary_path, destination)
     finally:
         if temporary_path is not None and temporary_path.exists():

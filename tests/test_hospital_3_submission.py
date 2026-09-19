@@ -119,7 +119,10 @@ class Hospital3SubmissionTests(unittest.TestCase):
                 main()
             with output.open(newline="", encoding="utf-8") as source:
                 written = list(csv.DictReader(source))
-            self.assertEqual(written, self.rows)
+            self.assertEqual(
+                written,
+                sorted(self.rows, key=lambda row: row["invoice_id"]),
+            )
             self.assertIn('"rows": 932', stdout.getvalue())
             self.assertIn('"unknown_service_lines": 14', stdout.getvalue())
 

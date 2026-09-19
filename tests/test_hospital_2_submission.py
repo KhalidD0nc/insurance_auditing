@@ -115,7 +115,11 @@ class Hospital2SubmissionTests(unittest.TestCase):
             with output.open(newline="", encoding="utf-8") as source:
                 written = list(csv.DictReader(source))
             self.assertEqual(tuple(written[0]), SUBMISSION_COLUMNS)
-            self.assertEqual(written[0]["invoice_id"], "INV-H4-EXISTING")
+            self.assertEqual(
+                [row["invoice_id"] for row in written],
+                sorted(row["invoice_id"] for row in written),
+            )
+            self.assertIn("INV-H4-EXISTING", {row["invoice_id"] for row in written})
             self.assertNotIn("INV-H2-STALE", {row["invoice_id"] for row in written})
             self.assertEqual(len(written), 1126)
 
@@ -145,7 +149,10 @@ class Hospital2SubmissionTests(unittest.TestCase):
 
             with output.open(newline="", encoding="utf-8") as source:
                 written = list(csv.DictReader(source))
-            self.assertEqual(written, self.rows)
+            self.assertEqual(
+                written,
+                sorted(self.rows, key=lambda row: row["invoice_id"]),
+            )
             self.assertIn('"rows": 1125', stdout.getvalue())
             self.assertIn('"unknown_service_lines": 14', stdout.getvalue())
 
