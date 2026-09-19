@@ -12,6 +12,7 @@ from .contract_parser import (
     load_hospital_2_contract,
     load_hospital_3_contract,
     load_hospital_4_contract,
+    load_hospital_5_contract,
 )
 from .evaluation import (
     evaluate_categories,
@@ -31,12 +32,17 @@ from .hospital_3_mappings import (
     DEFAULT_MAPPING_PATH as HOSPITAL_3_MAPPING_PATH,
     load_hospital_3_mapping_artifact,
 )
+from .hospital_5_mappings import (
+    DEFAULT_MAPPING_PATH as HOSPITAL_5_MAPPING_PATH,
+    load_hospital_5_mapping_artifact,
+)
 from .pricing import ContractAuditor
 from .reporting import build_audit_report
 from .submission import (
     build_hospital_2_submission_rows,
     build_hospital_3_submission_rows,
     build_hospital_4_submission_rows,
+    build_hospital_5_submission_rows,
     write_submission_rows,
 )
 
@@ -130,6 +136,27 @@ def _parser() -> argparse.ArgumentParser:
         "--mappings", type=Path, default=HOSPITAL_3_MAPPING_PATH
     )
     hospital_3_submission.add_argument(
+        "--output", type=Path, default=Path("submission.csv")
+    )
+    hospital_5 = subparsers.add_parser(
+        "audit-hospital-5",
+        help="produce an offline line-level Hospital 5 review report",
+    )
+    hospital_5.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_5.add_argument("--mappings", type=Path, default=HOSPITAL_5_MAPPING_PATH)
+    hospital_5.add_argument(
+        "--output", type=Path, default=Path("hospital_5_audit_report.json")
+    )
+    hospital_5.add_argument("--include-correct", action="store_true")
+    hospital_5_submission = subparsers.add_parser(
+        "generate-hospital-5-submission",
+        help="write complete Hospital 5 predictions to the submission CSV",
+    )
+    hospital_5_submission.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_5_submission.add_argument(
+        "--mappings", type=Path, default=HOSPITAL_5_MAPPING_PATH
+    )
+    hospital_5_submission.add_argument(
         "--output", type=Path, default=Path("submission.csv")
     )
     return parser
@@ -315,6 +342,74 @@ def main() -> None:
                 {
                     "hospital": 3,
                     "output": str(args.output.resolve()),
+                    "rows": len(rows),
+                    "flagged": sum(row["flagged"] == "1" for row in rows),
+                    "unknown_service_lines": unknown_service_lines,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return
+
+    if args.command in {"audit-hospital-5", "generate-hospital-5-submission"}:
+        contract = load_hospital_5_contract(
+            args.data_root
+            / "contracts"
+            / "hospital_5"
+            / "network_reimbursement_agreement.md"
+        )
+        mapping_path = _beneath_data_root(args.data_root, args.mappings)
+        mappings, artifact = load_hospital_5_mapping_artifact(
+            mapping_path, contract
+        )
+        dataset = load_hospital(args.data_root, 5)
+        result = ContractAuditor(
+            contract,
+            mappings,
+            conservative_matching=True,
+        ).audit_detailed(dataset)
+        unknown_service_lines = sum(
+            detail.matched_service is None
+            for details in result.line_details.values()
+            for detail in details
+        )
+        if args.command == "audit-hospital-5":
+            report = build_audit_report(
+                dataset,
+                result,
+                include_correct=args.include_correct,
+                hide_incomplete_expected_totals=True,
+                contract_source_sha256=contract.source_sha256,
+                mapping_artifact=artifact,
+            )
+            output_path = _beneath_data_root(args.data_root, args.output)
+            write_json_atomic(output_path, report)
+            print(
+                json.dumps(
+                    {
+                        "hospital": 5,
+                        "output": str(output_path.resolve()),
+                        **report["summary"],
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return
+
+        rows = build_hospital_5_submission_rows(result)
+        output_path = _beneath_data_root(args.data_root, args.output)
+        write_submission_rows(
+            output_path,
+            rows,
+            replace_invoice_prefix="INV-H5-",
+        )
+        print(
+            json.dumps(
+                {
+                    "hospital": 5,
+                    "output": str(output_path.resolve()),
                     "rows": len(rows),
                     "flagged": sum(row["flagged"] == "1" for row in rows),
                     "unknown_service_lines": unknown_service_lines,
