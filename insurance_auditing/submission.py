@@ -114,6 +114,33 @@ def build_hospital_4_submission_rows(
     return rows
 
 
+def build_hospital_3_submission_rows(
+    result: DetailedAuditResult,
+) -> list[dict[str, str]]:
+    """Build complete Hospital 3 coverage with conservative uncertainty caps."""
+
+    rows = []
+    for finding in sorted(
+        result.findings.values(),
+        key=lambda item: item.canonical_invoice_row,
+    ):
+        details = result.line_details.get(finding.invoice_id, ())
+        if "unknown_service" in finding.categories:
+            maximum_confidence = Decimal("0.70")
+        elif "service_not_contracted_on_date" in finding.categories:
+            maximum_confidence = Decimal("0.85")
+        else:
+            maximum_confidence = Decimal("0.90")
+        rows.append(
+            _submission_row(
+                finding,
+                details,
+                maximum_confidence=maximum_confidence,
+            )
+        )
+    return rows
+
+
 def write_submission_rows(
     path: Path | str,
     rows: list[dict[str, str]],

@@ -10,6 +10,7 @@ from .contracts import contract_for_hospital
 from .contract_parser import (
     load_hospital_1_contract,
     load_hospital_2_contract,
+    load_hospital_3_contract,
     load_hospital_4_contract,
 )
 from .evaluation import (
@@ -21,15 +22,20 @@ from .evaluation import (
 )
 from .io import load_hospital
 from .hospital_2_mappings import (
-    DEFAULT_MAPPING_PATH,
+    DEFAULT_MAPPING_PATH as HOSPITAL_2_MAPPING_PATH,
     load_hospital_2_mapping_artifact,
     prepare_hospital_2_mappings,
     write_json_atomic,
+)
+from .hospital_3_mappings import (
+    DEFAULT_MAPPING_PATH as HOSPITAL_3_MAPPING_PATH,
+    load_hospital_3_mapping_artifact,
 )
 from .pricing import ContractAuditor
 from .reporting import build_audit_report
 from .submission import (
     build_hospital_2_submission_rows,
+    build_hospital_3_submission_rows,
     build_hospital_4_submission_rows,
     write_submission_rows,
 )
@@ -79,7 +85,7 @@ def _parser() -> argparse.ArgumentParser:
         help="classify ambiguous Hospital 2 descriptions with the audit agent",
     )
     hospital_2_mappings.add_argument("--data-root", type=Path, default=Path.cwd())
-    hospital_2_mappings.add_argument("--output", type=Path, default=DEFAULT_MAPPING_PATH)
+    hospital_2_mappings.add_argument("--output", type=Path, default=HOSPITAL_2_MAPPING_PATH)
     hospital_2_mappings.add_argument("--refresh", action="store_true")
     hospital_2_mappings.add_argument("--batch-size", type=int, default=20)
     hospital_2 = subparsers.add_parser(
@@ -87,7 +93,7 @@ def _parser() -> argparse.ArgumentParser:
         help="produce an offline line-level Hospital 2 review report",
     )
     hospital_2.add_argument("--data-root", type=Path, default=Path.cwd())
-    hospital_2.add_argument("--mappings", type=Path, default=DEFAULT_MAPPING_PATH)
+    hospital_2.add_argument("--mappings", type=Path, default=HOSPITAL_2_MAPPING_PATH)
     hospital_2.add_argument(
         "--output", type=Path, default=Path("hospital_2_audit_report.json")
     )
@@ -98,12 +104,33 @@ def _parser() -> argparse.ArgumentParser:
     )
     hospital_2_submission.add_argument("--data-root", type=Path, default=Path.cwd())
     hospital_2_submission.add_argument(
-        "--mappings", type=Path, default=DEFAULT_MAPPING_PATH
+        "--mappings", type=Path, default=HOSPITAL_2_MAPPING_PATH
     )
     hospital_2_submission.add_argument(
         "--output",
         type=Path,
         default=Path("submission.csv"),
+    )
+    hospital_3 = subparsers.add_parser(
+        "audit-hospital-3",
+        help="produce an offline line-level Hospital 3 review report",
+    )
+    hospital_3.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_3.add_argument("--mappings", type=Path, default=HOSPITAL_3_MAPPING_PATH)
+    hospital_3.add_argument(
+        "--output", type=Path, default=Path("hospital_3_audit_report.json")
+    )
+    hospital_3.add_argument("--include-correct", action="store_true")
+    hospital_3_submission = subparsers.add_parser(
+        "generate-hospital-3-submission",
+        help="write complete Hospital 3 predictions to the submission CSV",
+    )
+    hospital_3_submission.add_argument("--data-root", type=Path, default=Path.cwd())
+    hospital_3_submission.add_argument(
+        "--mappings", type=Path, default=HOSPITAL_3_MAPPING_PATH
+    )
+    hospital_3_submission.add_argument(
+        "--output", type=Path, default=Path("submission.csv")
     )
     return parser
 
@@ -223,6 +250,70 @@ def main() -> None:
             json.dumps(
                 {
                     "hospital": 2,
+                    "output": str(args.output.resolve()),
+                    "rows": len(rows),
+                    "flagged": sum(row["flagged"] == "1" for row in rows),
+                    "unknown_service_lines": unknown_service_lines,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return
+
+    if args.command in {"audit-hospital-3", "generate-hospital-3-submission"}:
+        contract = load_hospital_3_contract(
+            args.data_root / "contracts" / "hospital_3"
+        )
+        mapping_path = _beneath_data_root(args.data_root, args.mappings)
+        mappings, artifact = load_hospital_3_mapping_artifact(
+            mapping_path, contract
+        )
+        dataset = load_hospital(args.data_root, 3)
+        result = ContractAuditor(
+            contract,
+            mappings,
+            conservative_matching=True,
+        ).audit_detailed(dataset)
+        unknown_service_lines = sum(
+            detail.matched_service is None
+            for details in result.line_details.values()
+            for detail in details
+        )
+        if args.command == "audit-hospital-3":
+            report = build_audit_report(
+                dataset,
+                result,
+                include_correct=args.include_correct,
+                hide_incomplete_expected_totals=True,
+                contract_source_sha256=contract.source_sha256,
+                mapping_artifact=artifact,
+            )
+            output_path = _beneath_data_root(args.data_root, args.output)
+            write_json_atomic(output_path, report)
+            print(
+                json.dumps(
+                    {
+                        "hospital": 3,
+                        "output": str(output_path.resolve()),
+                        **report["summary"],
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return
+
+        rows = build_hospital_3_submission_rows(result)
+        write_submission_rows(
+            args.output,
+            rows,
+            replace_invoice_prefix="INV-H3-",
+        )
+        print(
+            json.dumps(
+                {
+                    "hospital": 3,
                     "output": str(args.output.resolve()),
                     "rows": len(rows),
                     "flagged": sum(row["flagged"] == "1" for row in rows),
