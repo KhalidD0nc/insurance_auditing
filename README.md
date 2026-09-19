@@ -215,6 +215,30 @@ of inventing a contract rate, and confidence is capped at 0.70. All other
 Hospital 2 rows are capped at 0.90 because the hospital has no labelled
 calibration set.
 
+Generate the Hospital 3 offline audit report:
+
+```bash
+python3 -m insurance_auditing audit-hospital-3
+```
+
+Hospital 3 merges the Base Agreement, Appendix B, and Amendment No. 1 using
+the contractual precedence order. Seven substituted rates and two additional
+services take effect on 1 January 2025 by Service Date. The committed mapping
+artifact resolves six recurring textual ties from aggregate contract evidence;
+contradictory one-off descriptions remain `unknown_service`.
+
+Generate complete Hospital 3 submission coverage:
+
+```bash
+python3 -m insurance_auditing generate-hospital-3-submission \
+  --output submission.csv
+```
+
+The command atomically replaces existing `INV-H3-` rows and preserves other
+hospitals. It emits all 932 unique Hospital 3 invoice identifiers. Fourteen
+contradictory line descriptions across 13 invoices are capped at 0.70
+confidence; all other Hospital 3 rows are capped at 0.90.
+
 Generate the preliminary line-level Hospital 4 review report:
 
 ```bash

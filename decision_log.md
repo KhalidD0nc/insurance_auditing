@@ -2,10 +2,10 @@
 
 ## Scope and safety boundary
 
-Hospital 1 was used only as labelled development data. Hospitals 2 and 4 now
-have complete invoice coverage because their contracts can be represented and
-tested deterministically. Hospitals 3 and 5 were not attempted within the
-initial assessment time budget.
+Hospital 1 was used only as labelled development data. Hospitals 2, 3, and 4
+now have complete invoice coverage because their contracts can be represented
+and tested deterministically. Hospital 5 was not attempted within the initial
+assessment time budget.
 
 AI assistance was used and all prompts are retained in `prompts/`. For Hospital
 2, the LLM handles only semantic interpretation. Contract rules, arithmetic,
@@ -57,9 +57,18 @@ correct invoice and 0.96 for a deterministic finding, with conservative caps:
 identifiers, 0.92 for unknown services, 0.88 for malformed dates, 0.84 for weak
 matches on flagged lines, and 0.72 for daily-cap findings.
 
+**Hospital 3.** Amendment No. 1 overrides Appendix B from 1 January 2025 by
+Service Date, not invoice date. Seven existing services receive scheduled
+rates and two additional services are non-billable before that date. Six
+recurring textual ties are resolved only where all occurrences consistently
+use one candidate's documented basis and base, bundled, or uplifted rate.
+Fourteen contradictory lines remain `unknown_service`. All 932 invoice
+identifiers are submitted; unknown-service rows are capped at 0.70 confidence
+and other rows at 0.90.
+
 ## Unresolved work
 
-Hospital 2 is complete at invoice level. The next sequence is to implement and
-validate Hospital 3 and Hospital 5 independently. No contract rate is invented
-for the remaining contradictory descriptions merely to increase apparent
-pricing completeness.
+Hospitals 2, 3, and 4 are complete at invoice level. The next step is to
+implement and validate Hospital 5 independently. No contract rate is invented
+for contradictory descriptions merely to increase apparent pricing
+completeness.

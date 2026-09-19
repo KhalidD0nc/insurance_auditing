@@ -17,6 +17,12 @@ unit-basis ties and retained contradictory descriptions as unknown. Contract
 extraction, validation, pricing, totals, findings, and submission decisions
 remain deterministic. The prompts are versioned in `prompts/`.
 
+Hospital 3 is fully offline. Its parser merges all three contract documents,
+applies Amendment No. 1 by Service Date, and validates the old rate before
+accepting each substitution. Safe token and unit-basis matching resolves most
+descriptions; six recurring ties use a versioned aggregate contract-evidence
+artifact, while contradictory one-off descriptions stay unknown.
+
 ## Results
 
 The audit classified all 913 Hospital 1 invoice identifiers correctly: 58 true
@@ -84,9 +90,9 @@ across the full development set.
 
 ## Submission scope
 
-`submission.csv` contains all 835 Hospital 4 invoice identifiers and all 1,125
-Hospital 2 identifiers. Hospital 2 has 76 flagged invoices. Fourteen
+`submission.csv` contains all 835 Hospital 4 invoice identifiers, all 1,125
+Hospital 2 identifiers, and all 932 Hospital 3 identifiers. Hospital 2 has 76
+flagged invoices and Hospital 3 has 70. In each unlabelled hospital, fourteen
 contradictory descriptions across 13 invoices remain `unknown_service` with a
-0.70 confidence cap; the other rows are capped at 0.90. Hospitals 3 and 5 were
-not attempted within the initial time budget and are the next implementation
-targets.
+0.70 confidence cap. Other Hospital 2 and Hospital 3 rows are capped at 0.90.
+Hospital 5 remains the next implementation target.
