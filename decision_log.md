@@ -78,9 +78,12 @@ services absent from Table 1 and remain `unknown_service`. All 1,050 invoice
 identifiers are submitted; unknown-service rows are capped at 0.70 confidence
 and all other rows at 0.90.
 
-## Remaining delivery work
+## Final delivery status
 
-All scored hospitals are complete at invoice level. The remaining step is a
-final repository and submission reproducibility check before sharing the
-updated repository. No contract rate is invented for contradictory or
-non-contract descriptions merely to increase apparent pricing completeness.
+All scored hospitals are complete at invoice level. The final reproducibility
+check passed from a fresh repository checkout: all 104 tests passed, the H2-H5
+submission was rebuilt fully offline, and the regenerated 3,942-row file
+matched the committed `submission.csv` byte for byte. Its SHA-256 is
+`15f054e012b6526fcabe37180f91d5924d8a19fc4dff44d26eae12f29d72df95`.
+No contract rate is invented for contradictory or non-contract descriptions
+merely to increase apparent pricing completeness.
